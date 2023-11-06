@@ -1,9 +1,12 @@
 "use client"
 
+import { useState } from "react";
 import Button from "./_modules/common/components/Button";
+import Dropdown from "./_modules/common/components/Dropdown";
 import Input from "./_modules/common/components/Input";
 import Typography from "./_modules/common/components/Typography";
 import { trpc } from "./_trpc/client"
+import { PLATFORMS } from "@/lib/constants/platforms";
 
 const Icon = () => {
   return (
@@ -16,6 +19,7 @@ const Icon = () => {
 
 export default function Home() {
   const { data: users } = trpc.getUsers.useQuery();
+  const [platform, setPlatform] = useState(PLATFORMS[0]);
 
   return (
     <main className="p-4">
@@ -38,8 +42,8 @@ export default function Home() {
       <Typography variant="Body S">Body S</Typography>
       <br />
 
-      <Input label="This is the input" inputProps={{ placeholder: "A cool placeholder" }} icon={<Icon />} />
-      <Input label="This is the input" inputProps={{ placeholder: "A cool placeholder" }} error="Error Message" icon={<Icon />} />
+      <Input label="This is the label" inputProps={{ placeholder: "A cool placeholder" }} icon={<Icon />} />
+      <Input label="This is the label" inputProps={{ placeholder: "A cool placeholder" }} error="Error Message" icon={<Icon />} />
       <br />
 
       <Button onClick={() => console.log("click")}>Button</Button>
@@ -49,6 +53,8 @@ export default function Home() {
       <Button onClick={() => console.log("click")} variant="secondary">Button</Button>
       <Button onClick={() => console.log("click")} variant="secondary" disabled>Button</Button>
       <br />
+
+      <Dropdown data={PLATFORMS} selected={platform} setSelected={setPlatform} />
     </main>
   )
 }
