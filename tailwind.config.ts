@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        "heading-md": "32px"
+      },
       colors: {
         "custom-purple": "#633CFF",
         "custom-purple-lighter": "#BEADFF",

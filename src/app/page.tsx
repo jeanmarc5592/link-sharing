@@ -1,5 +1,6 @@
 "use client"
 
+import Typography from "./_modules/common/components/Typography";
 import { trpc } from "./_trpc/client"
 
 export default function Home() {
@@ -17,6 +18,8 @@ export default function Home() {
       <p className="text-custom-gray-lighter">Custom Gray Lighter</p>
       <p className="text-custom-gray-light">Custom Gray Light</p>
       <p className="text-custom-red">Custom Gray Red</p>
+
+      <Typography>Heading M</Typography>
     </main>
   )
 }
