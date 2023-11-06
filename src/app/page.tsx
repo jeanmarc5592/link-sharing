@@ -1,5 +1,6 @@
 "use client"
 
+import Button from "./_modules/common/components/Button";
 import Input from "./_modules/common/components/Input";
 import Typography from "./_modules/common/components/Typography";
 import { trpc } from "./_trpc/client"
@@ -17,7 +18,7 @@ export default function Home() {
   const { data: users } = trpc.getUsers.useQuery();
 
   return (
-    <main>
+    <main className="p-4">
       <pre>{JSON.stringify(users, null, 2)}</pre>
       <br />
 
@@ -37,10 +38,17 @@ export default function Home() {
       <Typography variant="Body S">Body S</Typography>
       <br />
 
-      <div className="p-3">
-        <Input label="This is the input" inputProps={{ placeholder: "A cool placeholder" }} icon={<Icon />} />
-        <Input label="This is the input" inputProps={{ placeholder: "A cool placeholder" }} error="Error Message" icon={<Icon />} />
-      </div>
+      <Input label="This is the input" inputProps={{ placeholder: "A cool placeholder" }} icon={<Icon />} />
+      <Input label="This is the input" inputProps={{ placeholder: "A cool placeholder" }} error="Error Message" icon={<Icon />} />
+      <br />
+
+      <Button onClick={() => console.log("click")}>Button</Button>
+      <Button onClick={() => console.log("click")} disabled>Button</Button>
+      <br />
+
+      <Button onClick={() => console.log("click")} variant="secondary">Button</Button>
+      <Button onClick={() => console.log("click")} variant="secondary" disabled>Button</Button>
+      <br />
     </main>
   )
 }
