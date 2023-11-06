@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../../lib/db/prisma";
+import { NextResponse } from "next/server";
+import { getAllUsers } from "./service";
 
-export const GET = async (req: NextRequest) => {
-  const users = await prisma.user.findMany();
+export const GET = async () => {
+  const users = await getAllUsers();
   return NextResponse.json({ users });
 }
