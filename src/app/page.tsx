@@ -9,6 +9,7 @@ export default function Home() {
   return (
     <main>
       <pre>{JSON.stringify(users, null, 2)}</pre>
+      <br />
 
       <p className="text-custom-purple">Custom Purple</p>
       <p className="text-custom-purple-lighter">Custom Purple Lighter</p>
@@ -18,8 +19,14 @@ export default function Home() {
       <p className="text-custom-gray-lighter">Custom Gray Lighter</p>
       <p className="text-custom-gray-light">Custom Gray Light</p>
       <p className="text-custom-red">Custom Gray Red</p>
+      <br />
 
-      <Typography>Heading M</Typography>
+      <Typography variant="Heading M">Heading M</Typography>
+      <Typography variant="Heading S">Heading S</Typography>
+      <Typography variant="Body M">Body M</Typography>
+      <Typography variant="Body S">Body S</Typography>
+      <br />
+      
     </main>
   )
 }
