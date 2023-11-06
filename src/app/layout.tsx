@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Instrument_Sans } from 'next/font/google'
 import './globals.css'
 import { Provider } from './_trpc/Provider'
 
-const inter = Inter({ subsets: ['latin'] })
+const instrumentSans = Instrument_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={instrumentSans.className}>
+      <body>
         <Provider>
           {children}
         </Provider>
