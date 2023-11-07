@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={instrumentSans.className}>
-      <body>
+      <body className="bg-custom-gray-light">
         <Provider>
           {children}
         </Provider>
