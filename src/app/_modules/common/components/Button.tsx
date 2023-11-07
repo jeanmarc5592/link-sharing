@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({ children, variant="primary", ...restPro
 
   return (
     <button
-      className={clsx("mb-6 mr-6 py-2.5 px-12 rounded-md transition-all", variantStyle[variant])}
+      className={clsx("mb-6 mr-6 py-2.5 px-12 rounded-md transition-all w-full", variantStyle[variant])}
       {...restProps}
     >
       {children}

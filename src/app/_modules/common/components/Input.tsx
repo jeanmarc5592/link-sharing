@@ -14,7 +14,7 @@ const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon 
     <div>
       <label 
         htmlFor={label.toLowerCase()} 
-        className="block mb-1 text-custom-black font-medium"
+        className="block mb-1 text-custom-gray"
       >
         {label}
       </label>

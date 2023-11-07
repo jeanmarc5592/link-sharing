@@ -15,16 +15,16 @@ const Typography: React.FC<TypogryphyProps> = ({ children, variant = "Body M", c
       case "Heading S":
         return ["text-base", "font-bold"].join(" ");
       case "Body M":
-        return ["text-base"].join(" ");
+        return ["text-custom-gray text-base"].join(" ");
       case "Body S":
-        return ["text-xs"].join(" ");
+        return ["text-custom-gray text-xs"].join(" ");
       default: 
-        return ["text-base"].join(" ");
+        return ["text-custom-gray text-base"].join(" ");
     }
   }
 
   return (
-    <p style={style} className={`${getVariantStyles()} ${ className}`}>
+    <p style={style} className={`${getVariantStyles()} ${className}`}>
       {children}
     </p>
   )
