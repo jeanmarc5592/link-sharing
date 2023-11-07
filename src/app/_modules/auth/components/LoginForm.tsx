@@ -1,5 +1,6 @@
 "use client"
 
+import { ROUTES } from "@/lib/constants/routes"
 import Button from "../../common/components/Button"
 import Input from "../../common/components/Input"
 import Typography from "../../common/components/Typography"
@@ -29,7 +30,7 @@ const LoginForm = () => {
       <Button>Login</Button>
 
       <Typography className="text-center">
-        Don&apos;t have an account? <a className="text-custom-purple" href="/auth/signup">Create account</a>
+        Don&apos;t have an account? <a className="text-custom-purple" href={ROUTES.auth.signup.href}>Create account</a>
       </Typography>
     </AuthCard>
   )
