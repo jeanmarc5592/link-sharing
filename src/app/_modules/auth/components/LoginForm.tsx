@@ -24,7 +24,7 @@ const LoginForm = () => {
   });
   const { handleSubmit, formState: { errors }} = methods;
 
-  const onSubmit = (data: { email: string; password: string; }) => {
+  const onSubmit = (data: LoginFormSchemaType) => {
     // TODO: Implement login mechanism
     alert(JSON.stringify(data));
   };
