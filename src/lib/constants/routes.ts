@@ -1,8 +1,12 @@
 export const ROUTES = {
   auth: {
     signup: {
-      name: "Sign Up",
+      name: "signup",
       href: "/auth/signup",
+    },
+    login: {
+      name: "login",
+      href: "/auth/login",
     },
   },
 };
