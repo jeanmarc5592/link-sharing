@@ -9,7 +9,7 @@ import Typography from "../../common/components/Typography"
 import EmailIcon from "../../common/components/icons/EmailIcon"
 import PasswordIcon from "../../common/components/icons/PasswordIcon"
 import AuthCard from "./AuthCard"
-import { useForm, FormProvider, Form } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 
 const loginFormSchema = z.object({
   email: z.string().min(1).email(),
