@@ -44,7 +44,6 @@ const LoginForm = () => {
             error={errors.email?.message}
           />
 
-          
           <Input 
             label="Password" 
             validationName="password"
