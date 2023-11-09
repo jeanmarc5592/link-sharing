@@ -10,6 +10,8 @@ import EmailIcon from "../../common/components/icons/EmailIcon"
 import PasswordIcon from "../../common/components/icons/PasswordIcon"
 import AuthCard from "./AuthCard"
 import { useForm, FormProvider } from "react-hook-form";
+import { signIn } from "next-auth/react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const loginFormSchema = z.object({
   email: z.string().min(1).email(),
@@ -24,9 +26,30 @@ const LoginForm = () => {
   });
   const { handleSubmit, formState: { errors }} = methods;
 
-  const onSubmit = (data: LoginFormSchemaType) => {
-    // TODO: Implement login mechanism
-    alert(JSON.stringify(data));
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
+  const onSubmit = async (data: LoginFormSchemaType) => {
+    const { email, password } = data;
+
+    try {
+      const response = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+        callbackUrl,
+      });
+
+      console.log(response);
+
+      if (!response?.error && response?.status == 200) {
+        router.push(callbackUrl);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
