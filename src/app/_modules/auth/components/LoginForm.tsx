@@ -29,6 +29,7 @@ const LoginForm = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
+  // TODO: Use ROUTES constant for home route
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const onSubmit = async (data: LoginFormSchemaType) => {
@@ -47,6 +48,7 @@ const LoginForm = () => {
         router.push(callbackUrl);
       }
     } catch (error) {
+      // TODO: Render Error notification
       console.error(error);
     }
   };

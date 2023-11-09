@@ -10,6 +10,8 @@ import EmailIcon from '../../common/components/icons/EmailIcon';
 import PasswordIcon from '../../common/components/icons/PasswordIcon';
 import { ROUTES } from '@/lib/constants/routes';
 import Button from '../../common/components/Button';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const signupFormSchema = z.object({
   email: z.string().min(1).email(),
@@ -33,9 +35,29 @@ const SignupForm = () => {
   });
   const { handleSubmit, formState: { errors }} = methods;
 
-  const onSubmit = (data: SignupFormSchemaType) => {
-    // TODO: Implement signup mechanism
-    alert(JSON.stringify(data));
+  const router = useRouter();
+
+  const onSubmit = async (data: SignupFormSchemaType) => {
+    try {
+      // TODO: Use Service Method
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+
+      if (!response.ok) {
+        // TODO: Throw Error notification
+        console.error("Something went wrong...");
+        return;
+      }
+
+      signIn();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
