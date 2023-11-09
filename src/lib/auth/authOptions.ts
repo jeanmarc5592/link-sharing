@@ -26,12 +26,14 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // TODO: Create and use UsersService
         const user = await prisma.user.findUnique({
           where: {
             email: credentials.email,
           },
         });
 
+        // TODO: Create and use cryptography utils
         if (!user || !(await compare(credentials.password, user.password))) {
           return null;
         }

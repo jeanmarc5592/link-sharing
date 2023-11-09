@@ -34,6 +34,7 @@ const LoginForm = () => {
   const onSubmit = async (data: LoginFormSchemaType) => {
     const { email, password } = data;
 
+    // TODO: Create and use AuthService
     try {
       const response = await signIn("credentials", {
         redirect: false,
