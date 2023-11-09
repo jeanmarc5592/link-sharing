@@ -43,8 +43,6 @@ const LoginForm = () => {
         callbackUrl,
       });
 
-      console.log(response);
-
       if (!response?.error && response?.status == 200) {
         router.push(callbackUrl);
       }
