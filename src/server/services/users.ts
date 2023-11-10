@@ -7,6 +7,12 @@ export class UsersService {
       const user = await prisma.user.findUnique({
         where: { email }
       });
+     
+      if (!user) {
+        console.log(`User with email "${email}" not found.`)
+        return null;
+      }
+
       return user;
     } catch (error) {
       console.error(error);
