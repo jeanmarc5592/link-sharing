@@ -1,5 +1,6 @@
-import prisma from "@/lib/db/prisma";
-import { hash } from "bcryptjs";
+import { CryptographyService } from "@/server/services/cryptography";
+import { UsersService } from "@/server/services/users";
+import { User } from "@prisma/client";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const credentialsSignup = CredentialsProvider({
@@ -10,23 +11,30 @@ export const credentialsSignup = CredentialsProvider({
     password: { type: "password" },
   },
   async authorize(credentials) {
-    // TODO: Validate input (Required fields are not missing, field types are correct, ...)
+    const usersService = new UsersService();
+    const crypographyService = new CryptographyService();
+
+    // TODO: Validate input (Required fields are not missing, field types are correct, passwords are equal ...)
     if (!credentials || !credentials.email || !credentials.password) {
       return null;
     }
 
-    const { email, password } = credentials;
+    const userExists = await usersService.findByEmail(credentials.email);
 
-    // TODO: Add cryphtography utils
-    const hashed_password = await hash(password, 12);
+    if (userExists) {
+      return null;
+    }
 
-    // TODO: Add UsersService (check if email is not signed up already)
-    const user = await prisma.user.create({
-      data: {
-        email: email.toLowerCase(),
-        password: hashed_password,
-      },
-    });
+    const userToCreate: Pick<User, "email" | "password"> = {
+      email: credentials.email,
+      password: await crypographyService.hashString(credentials.password),
+    };
+
+    const user = await usersService.create(userToCreate);
+
+    if (!user) {
+      return null;
+    }
 
     return {
       id: user.id,

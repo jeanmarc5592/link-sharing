@@ -1,5 +1,5 @@
-import prisma from "@/lib/db/prisma";
-import { compare } from "bcryptjs";
+import { CryptographyService } from "@/server/services/cryptography";
+import { UsersService } from "@/server/services/users";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const credentialsLogin = CredentialsProvider({
@@ -10,21 +10,23 @@ export const credentialsLogin = CredentialsProvider({
     password: { type: "password" },
   },
   async authorize(credentials) {
+    const usersService = new UsersService();
+    const cryptographyService = new CryptographyService();
+
     // TODO: Validate input (Required fields are not missing, field types are correct, ...)
 
-    if (!credentials?.email || !credentials.password) {
+    if (!credentials || !credentials?.email || !credentials.password) {
       return null;
     }
 
-    // TODO: Create and use UsersService
-    const user = await prisma.user.findUnique({
-      where: {
-        email: credentials.email,
-      },
-    });
+    const user = await usersService.findByEmail(credentials.email);
 
-    // TODO: Create and use cryptography utils
-    if (!user || !(await compare(credentials.password, user.password))) {
+    if (!user) {
+      return null;
+    }
+    const passwordsMatch = await cryptographyService.compareStrings(credentials.password, user.password);
+
+    if (!passwordsMatch) {
       return null;
     }
 
