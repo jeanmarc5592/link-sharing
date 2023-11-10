@@ -1,18 +1,20 @@
 import prisma from "../db/prisma";
-import { compare } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/",
+    signIn: "/auth/login",
+    newUser: "/auth/signup",
   },
   session: {
     strategy: "jwt",
   },
   providers: [
     CredentialsProvider({
-      name: "Sign in",
+      id: "login",
+      name: "login",
       credentials: {
         email: {
           label: "Email",
@@ -22,6 +24,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        // TODO: Validate input (Required fields are not missing, field types are correct, ...)
+
         if (!credentials?.email || !credentials.password) {
           return null;
         }
@@ -44,6 +48,42 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    CredentialsProvider({
+      id: "signup",
+      name: "signup",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "john@gmail.com",
+        },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        // TODO: Validate input (Required fields are not missing, field types are correct, ...)
+        if (!credentials || !credentials.email || !credentials.password) {
+          return null;
+        }
+
+        const { email, password } = credentials;
+
+        // TODO: Add cryphtography utils
+        const hashed_password = await hash(password, 12);
+
+        // TODO: Add UsersService (check if email is not signed up already)
+        const user = await prisma.user.create({
+          data: {
+            email: email.toLowerCase(),
+            password: hashed_password,
+          },
+        });
+
+        return {
+          id: user.id,
+          email: user.email,
+        }
+      }
+    }),
   ],
   callbacks: {
     session: ({ session, token }) => {
@@ -52,7 +92,6 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
-          randomKey: token.randomKey,
         },
       };
     },
@@ -62,7 +101,6 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id,
-          randomKey: u.randomKey,
         };
       }
       return token;
