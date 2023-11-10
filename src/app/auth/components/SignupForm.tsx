@@ -1,7 +1,6 @@
 "use client"
 
 import AuthCard from './AuthCard'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import Typography from '../../common/components/Typography';
@@ -10,43 +9,17 @@ import EmailIcon from '../../common/components/icons/EmailIcon';
 import PasswordIcon from '../../common/components/icons/PasswordIcon';
 import { ROUTES } from '@/lib/constants/routes';
 import Button from '../../common/components/Button';
-import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { SignupSchemaType, signupSchema } from '@/lib/validators/signup';
+import useSignup from '../hooks/useSignup';
 
 const SignupForm = () => {
   const methods = useForm<SignupSchemaType>({
     resolver: zodResolver(signupSchema),
   });
+
+  const { onSubmit } = useSignup();
+
   const { handleSubmit, formState: { errors }} = methods;
-
-  const searchParams = useSearchParams();
-  // TODO: Use ROUTES constant for home route
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-
-  const router = useRouter();
-
-  const onSubmit = async (data: SignupSchemaType) => {
-    const { email, password, confirmPassword } = data;
-
-    // TODO: Create and use AuthService
-    try {
-      const response = await signIn("signup", {
-        redirect: false,
-        email,
-        password,
-        confirmPassword,
-        callbackUrl,
-      });
-
-      if (!response?.error && response?.status == 200) {
-        router.push(callbackUrl);
-      }
-    } catch (error) {
-      // TODO: Render Error notification
-      console.error(error);
-    }
-  };
 
   return (
     <AuthCard>
