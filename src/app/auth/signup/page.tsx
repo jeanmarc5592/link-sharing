@@ -1,4 +1,4 @@
-import { authOptions } from '@/lib/auth/authOptions';
+import { authOptions } from '@/lib/auth/options';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import SignupForm from '../../_modules/auth/components/SignupForm';
