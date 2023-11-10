@@ -11,7 +11,7 @@ import PasswordIcon from '../../common/components/icons/PasswordIcon';
 import { ROUTES } from '@/lib/constants/routes';
 import Button from '../../common/components/Button';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const signupFormSchema = z.object({
   email: z.string().min(1).email(),
@@ -35,27 +35,29 @@ const SignupForm = () => {
   });
   const { handleSubmit, formState: { errors }} = methods;
 
+  const searchParams = useSearchParams();
+  // TODO: Use ROUTES constant for home route
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const router = useRouter();
 
   const onSubmit = async (data: SignupFormSchemaType) => {
+    const { email, password } = data;
+
+    // TODO: Create and use AuthService
     try {
-      // TODO: Use Service Method
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        }
+      const response = await signIn("signup", {
+        redirect: false,
+        email,
+        password,
+        callbackUrl,
       });
 
-      if (!response.ok) {
-        // TODO: Throw Error notification
-        console.error("Something went wrong...");
-        return;
+      if (!response?.error && response?.status == 200) {
+        router.push(callbackUrl);
       }
-
-      signIn();
     } catch (error) {
+      // TODO: Render Error notification
       console.error(error);
     }
   };

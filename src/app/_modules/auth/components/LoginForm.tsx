@@ -37,7 +37,7 @@ const LoginForm = () => {
 
     // TODO: Create and use AuthService
     try {
-      const response = await signIn("credentials", {
+      const response = await signIn("login", {
         redirect: false,
         email,
         password,

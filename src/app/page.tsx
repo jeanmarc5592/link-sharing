@@ -1,21 +1,20 @@
-"use client"
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import LogoutButton from "./_modules/auth/components/LogoutButton";
+import { authOptions } from "@/lib/auth/authOptions";
 
-import { signOut } from "next-auth/react";
-import Button from "./_modules/common/components/Button";
+const HomePage = async () => {
+  const session = await getServerSession(authOptions);
 
-const HomePage = () => {
-  // TODO: Use AuthService here
-  const logout = () =>  {
-    signOut({ callbackUrl: "/auth/login" });
-  };
-
+  if (!session) {
+    redirect("/auth/login");
+  }
+  
   return (
     <main>
       HOME PAGE
       
-      <div className="w-[25vw]">
-        <Button variant="primary" onClick={logout}>Log out</Button>
-      </div>
+      <LogoutButton />
     </main>
   )
 }
