@@ -9,4 +9,8 @@ export const ROUTES = {
       href: "/auth/login",
     },
   },
+  home: {
+    name: "home",
+    href: "/",
+  },
 };
