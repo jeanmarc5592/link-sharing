@@ -27,7 +27,7 @@ const SignupForm = () => {
   const router = useRouter();
 
   const onSubmit = async (data: SignupSchemaType) => {
-    const { email, password } = data;
+    const { email, password, confirmPassword } = data;
 
     // TODO: Create and use AuthService
     try {
@@ -35,6 +35,7 @@ const SignupForm = () => {
         redirect: false,
         email,
         password,
+        confirmPassword,
         callbackUrl,
       });
 

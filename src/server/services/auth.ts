@@ -2,6 +2,8 @@ import { loginSchema } from "@/lib/validators/login";
 import { CryptographyService } from "./cryptography";
 import { UsersService } from "./users";
 import { ValidationService } from "./validation";
+import { User } from "@prisma/client";
+import { signupSchema } from "@/lib/validators/signup";
 
 export class AuthService {
   private usersService: UsersService;
@@ -16,10 +18,10 @@ export class AuthService {
     this.validationService = new ValidationService();
   }
 
-  async login(credentials: Record<"email" | "password", string> | undefined) {
-    const isValid = this.validationService.validateSchema(loginSchema, credentials);
+  async login(credentials: Record<"email" | "password", string> | undefined): Promise<Pick<User, "id" | "email"> | null> {
+    const schemaValidation = this.validationService.validateSchema(loginSchema, credentials);
 
-    if (!isValid) {
+    if (schemaValidation !== "OK") {
       return null;
     }
 
@@ -38,5 +40,41 @@ export class AuthService {
       id: user.id,
       email: user.email,
     };
+  }
+
+  async signup(credentials: Record<"email" | "password" | "confirmPassword", string> | undefined): Promise<Pick<User, "id" | "email"> | null> {
+    const schemaValidation = this.validationService.validateSchema(signupSchema, credentials);
+
+    if (schemaValidation !== "OK") {
+      return null;
+    }
+
+    const passwordsAreEqual = this.validationService.validateEquality(credentials!.password, credentials!.confirmPassword);
+
+    if (passwordsAreEqual !== "OK") {
+      return null;
+    }
+
+    const userExists = await this.usersService.findByEmail(credentials!.email);
+
+    if (userExists) {
+      return null;
+    }
+
+    const userToCreate: Pick<User, "email" | "password"> = {
+      email: credentials!.email,
+      password: await this.cryptographyService.hashString(credentials!.password),
+    };
+
+    const user = await this.usersService.create(userToCreate);
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+    }
   }
 }
