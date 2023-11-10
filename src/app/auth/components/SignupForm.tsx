@@ -12,26 +12,11 @@ import { ROUTES } from '@/lib/constants/routes';
 import Button from '../../common/components/Button';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-
-const signupFormSchema = z.object({
-  email: z.string().min(1).email(),
-  password: z.string().min(8),
-  confirmPassword: z.string().min(8),
-}).superRefine(({ password, confirmPassword}, ctx) =>  {
-  if (password !== confirmPassword) {
-    ctx.addIssue({
-      code: "custom",
-      path: ["confirmPassword"],
-      message: "Passwords must match",
-    })
-  }
-});
-
-type SignupFormSchemaType = z.infer<typeof signupFormSchema>;
+import { SignupSchemaType, signupSchema } from '@/lib/validators/signup';
 
 const SignupForm = () => {
-  const methods = useForm<SignupFormSchemaType>({
-    resolver: zodResolver(signupFormSchema),
+  const methods = useForm<SignupSchemaType>({
+    resolver: zodResolver(signupSchema),
   });
   const { handleSubmit, formState: { errors }} = methods;
 
@@ -41,7 +26,7 @@ const SignupForm = () => {
 
   const router = useRouter();
 
-  const onSubmit = async (data: SignupFormSchemaType) => {
+  const onSubmit = async (data: SignupSchemaType) => {
     const { email, password } = data;
 
     // TODO: Create and use AuthService

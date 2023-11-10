@@ -1,6 +1,5 @@
 "use client"
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ROUTES } from "@/lib/constants/routes"
 import Button from "../../common/components/Button"
@@ -12,17 +11,12 @@ import AuthCard from "./AuthCard"
 import { useForm, FormProvider } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { LoginSchemaType, loginSchema } from "@/lib/validators/login";
 
-const loginFormSchema = z.object({
-  email: z.string().min(1).email(),
-  password: z.string().min(8),
-});
-
-type LoginFormSchemaType = z.infer<typeof loginFormSchema>;
 
 const LoginForm = () => {
-  const methods = useForm<LoginFormSchemaType>({
-    resolver: zodResolver(loginFormSchema),
+  const methods = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
   });
   const { handleSubmit, formState: { errors }} = methods;
 
@@ -32,7 +26,7 @@ const LoginForm = () => {
   // TODO: Use ROUTES constant for home route
   const callbackUrl = searchParams.get("callbackUrl") || "/";
 
-  const onSubmit = async (data: LoginFormSchemaType) => {
+  const onSubmit = async (data: LoginSchemaType) => {
     const { email, password } = data;
 
     // TODO: Create and use AuthService
