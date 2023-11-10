@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ROUTES } from "@/lib/constants/routes"
@@ -9,43 +9,17 @@ import EmailIcon from "../../common/components/icons/EmailIcon"
 import PasswordIcon from "../../common/components/icons/PasswordIcon"
 import AuthCard from "./AuthCard"
 import { useForm, FormProvider } from "react-hook-form";
-import { signIn } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
 import { LoginSchemaType, loginSchema } from "@/lib/validators/login";
-
+import useLogin from "../hooks/useLogin";
 
 const LoginForm = () => {
   const methods = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
+  
+  const { onSubmit } = useLogin();
+
   const { handleSubmit, formState: { errors }} = methods;
-
-  const router = useRouter();
-
-  const searchParams = useSearchParams();
-  // TODO: Use ROUTES constant for home route
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-
-  const onSubmit = async (data: LoginSchemaType) => {
-    const { email, password } = data;
-
-    // TODO: Create and use AuthService
-    try {
-      const response = await signIn("login", {
-        redirect: false,
-        email,
-        password,
-        callbackUrl,
-      });
-
-      if (!response?.error && response?.status == 200) {
-        router.push(callbackUrl);
-      }
-    } catch (error) {
-      // TODO: Render Error notification
-      console.error(error);
-    }
-  };
 
   return (
     <AuthCard>
