@@ -5,7 +5,7 @@ export class ValidationService {
     const result = schema.safeParse(input);
 
     if (!result.success) {
-      console.error("Validation failed with errors", result.error);
+      console.error("Schema is not valid", result.error);
       return null;
     }
 
@@ -16,6 +16,7 @@ export class ValidationService {
     const isEqual = stringOne === stringTwo;
 
     if (!isEqual) {
+      console.error("Strings are not equal", { stringOne, stringTwo });
       return null;
     }
 

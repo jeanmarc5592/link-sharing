@@ -58,6 +58,7 @@ export class AuthService {
     const userExists = await this.usersService.findByEmail(credentials!.email);
 
     if (userExists) {
+      console.error(`User with email "${credentials!.email}" already exists`);
       return null;
     }
 
