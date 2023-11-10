@@ -5,6 +5,7 @@ import { LoginSchemaType } from "@/lib/validators/login";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const useLogin = () => {
   const router = useRouter();
@@ -14,20 +15,19 @@ const useLogin = () => {
     const { email, password } = data;
     const callbackUrl: string = searchParams.get("callbackUrl") || ROUTES.home.href;
 
-    try {
-      const response = await signIn("login", {
-        redirect: false,
-        email,
-        password,
-        callbackUrl,
-      });
+    const response = await signIn("login", {
+      redirect: false,
+      email,
+      password,
+      callbackUrl,
+    });
 
-      if (!response?.error && response?.status == 200) {
-        router.push(callbackUrl);
-      }
-    } catch (error) {
-      // TODO: Render Error notification
-      console.error(error);
+    if (!response?.ok) {
+      toast.error("User name or password is wrong.");
+    }
+
+    if (!response?.error && response?.status == 200) {
+      router.push(callbackUrl);
     }
   };
   
