@@ -17,7 +17,7 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
   
-  const { onSubmit } = useLogin();
+  const { onSubmit, isLoading } = useLogin();
 
   const { handleSubmit, formState: { errors }} = methods;
 
@@ -44,7 +44,12 @@ const LoginForm = () => {
             error={errors.password?.message}
           />
 
-          <Button type="submit">Login</Button>
+          <Button
+            type="submit"
+            isLoading={isLoading}
+          >
+            Login
+          </Button>
 
           <Typography className="text-center">
             Don&apos;t have an account? <a className="text-custom-purple" href={ROUTES.auth.signup.href}>Create account</a>
