@@ -1,15 +1,21 @@
+"use client"
+
 import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
 import Typography from "./Typography";
+import { useFormContext } from "react-hook-form";
 
 interface InputProps {
   label: string;
+  validationName: string;
   inputProps?: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
   error?: string;
   icon?: ReactNode;
 }
 
-const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon }) => {
+const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon, validationName }) => {
+  const { register } = useFormContext();
+
   return (
     <div>
       <label 
@@ -26,10 +32,11 @@ const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon 
           </div>
         )}
         <input 
+          {...register(validationName)}
           id={label.toLowerCase()} 
           className={
             clsx(
-              "border border-custom-gray-lighter custom-black rounded-md focus:border-custom-purple block w-full p-2.5 mb-1", 
+              "border border-custom-gray-lighter rounded-md focus:border-custom-purple focus:text-custom-black block w-full p-2.5 mb-1", 
               error && "text-custom-red border-custom-red focus:border-custom-red",
               icon && "pl-10",
             )
@@ -39,7 +46,7 @@ const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon 
         {error && <Typography variant="Body S" className="text-custom-red">{error}</Typography>}
       </div>
     </div>
-  )
+  );
 }
 
 export default Input

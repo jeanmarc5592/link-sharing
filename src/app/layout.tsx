@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Instrument_Sans } from 'next/font/google'
 import './globals.css'
-import { Provider } from './_trpc/Provider'
+import ToastProvider from './common/providers/ToastProvider'
 
 const instrumentSans = Instrument_Sans({ subsets: ['latin'] })
 
@@ -18,9 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={instrumentSans.className}>
       <body className="bg-custom-gray-light">
-        <Provider>
+        <ToastProvider>
           {children}
-        </Provider>
+        </ToastProvider>
       </body>
     </html>
   )

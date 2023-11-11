@@ -1,7 +1,18 @@
-const SignupPage = () => {
+import { authOptions } from '@/lib/auth/options';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import SignupForm from '../components/SignupForm';
+
+const SignupPage = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    redirect("/");
+  }
+
   return (
-    <div>
-      SIGNUP PAGE
+    <div className="w-[100vw] h-[100vh] flex justify-center sm:items-center">
+      <SignupForm />
     </div>
   )
 }
