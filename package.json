@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "start:db": "docker run --rm -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust postgres"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
