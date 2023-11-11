@@ -17,7 +17,7 @@ const SignupForm = () => {
     resolver: zodResolver(signupSchema),
   });
 
-  const { onSubmit } = useSignup();
+  const { onSubmit, isLoading } = useSignup();
 
   const { handleSubmit, formState: { errors }} = methods;
 
@@ -52,7 +52,12 @@ const SignupForm = () => {
             error={errors.confirmPassword?.message}
           />
 
-          <Button type="submit">Create new account</Button>
+          <Button 
+            isLoading={isLoading} 
+            type="submit"
+          >
+            Create new account
+          </Button>
 
           <Typography className="text-center">
             Already have an account? <a className="text-custom-purple" href={ROUTES.auth.login.href}>Login</a>

@@ -5,13 +5,17 @@ import { SignupSchemaType } from "@/lib/validators/signup";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 const useSignup = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const onSubmit = async (data: SignupSchemaType) => {
+    setIsLoading(true);
+
     const { email, password, confirmPassword } = data;
     const callbackUrl: string = searchParams.get("callbackUrl") || ROUTES.home.href;
 
@@ -30,9 +34,11 @@ const useSignup = () => {
     if (!response?.error && response?.status == 200) {
       router.push(callbackUrl);
     }
+
+    setIsLoading(false);
   }
 
-  return { onSubmit };
+  return { onSubmit, isLoading };
 }
 
 export default useSignup;
