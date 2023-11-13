@@ -10,10 +10,10 @@ const HomePageContent = () => {
 
   return (
     <div className="flex w-full px-4">
-      <div className="bg-white rounded-md w-1/3 mr-4 p-6">
+      <div className="bg-white rounded-md w-1/3 mr-4 p-6 hidden lg:block">
         <Preview />
       </div>
-      <div className="bg-white w-2/3 rounded-md p-6">
+      <div className="bg-white rounded-md w-full lg:w-2/3 p-6">
         {activeTab === "links" && <Links />}
         {activeTab === "profile" && <Profile />}
       </div>

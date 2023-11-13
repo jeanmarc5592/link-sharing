@@ -13,7 +13,7 @@ const Header = () => {
   const activeTab = useAppSelector((state) => state.homeTabs.activeTab);
 
   return (
-    <div className="bg-white rounded-md p-4 flex items-center justify-evenly sm:m-4">
+    <div className="bg-white rounded-md p-4 flex items-center justify-evenly m-4">
       <Logo className="hidden sm:flex" />
       <div className="sm:hidden">
         <LogoIcon />
