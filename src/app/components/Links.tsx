@@ -16,7 +16,11 @@ const Links = () => {
     <>
       <Typography variant="Heading M" className="mb-4">Customize your links</Typography>
       <Typography className="mb-12">Add/edit/remove links below and then share all your profiles with the world!</Typography>
-      <Button variant="secondary" onClick={addNewLink}>+ Add new link</Button> 
+      <Button 
+        className="mb-6"
+        variant="secondary" 
+        onClick={addNewLink
+      }>+ Add new link</Button> 
 
       <LinksList />
 
