@@ -4,6 +4,7 @@ import LogoutButton from "./auth/components/LogoutButton";
 import { authOptions } from "@/lib/auth/options";
 import Header from "./common/components/Header";
 import HomePageContent from "./components/HomePageContent";
+import Page from "./common/components/Page";
 
 const HomePage = async () => {
   const session = await getServerSession(authOptions);
@@ -13,11 +14,11 @@ const HomePage = async () => {
   }
   
   return (
-    <main>
+    <Page>
       <Header />
       <HomePageContent />
       <LogoutButton />
-    </main>
+    </Page>
   )
 }
 
