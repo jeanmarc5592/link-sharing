@@ -1,15 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '@/lib/store/store';
 
-interface HomeTabsState {};
+interface HomeTabsState {
+  activeTab: string;
+};
 
-const initialState: HomeTabsState = {};
+const initialState: HomeTabsState = {
+  activeTab: "links",
+};
 
 export const homeTabsSlice = createSlice({
   name: 'homeTabs',
   initialState,
-  reducers: {}
+  reducers: {
+    setActiveTab: (state, action: PayloadAction<string>) => {
+      if (action.payload !== state.activeTab) {
+        state.activeTab = action.payload;
+      }
+    }
+  }
 });
+
+export const { setActiveTab } = homeTabsSlice.actions;
 
 export default homeTabsSlice.reducer;

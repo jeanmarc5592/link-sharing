@@ -1,20 +1,33 @@
 import clsx from "clsx";
-import { PropsWithChildren, ReactNode } from "react"
+import { ReactNode } from "react"
+import { useAppDispatch } from '../hooks/useAppDispatch';
+import { setActiveTab } from "@/lib/store/slices/homeTabsSlice";
 
-interface TabProps extends PropsWithChildren {
+interface TabProps {
+  label: string;
+  id: string;
   isActive?: boolean;
   icon?: ReactNode;
 }
 
-const Tab: React.FC<TabProps> = ({ children, icon, isActive = false }) => {
+const Tab: React.FC<TabProps> = ({ label, id, icon, isActive = false }) => {
+  const dispatch = useAppDispatch();
+
   const defaultStyle = "flex items-center font-semibold text-custom-gray py-3 px-6 mr-4 cursor-pointer rounded-md transition-all"
   const activeStyle = "bg-custom-purple-light text-custom-purple";
 
+  const handleClick = () => {
+    dispatch(setActiveTab(id));
+  }
+
   return (
-    <div className={clsx(defaultStyle, isActive && activeStyle)}>
+    <div 
+      className={clsx(defaultStyle, isActive && activeStyle)}
+      onClick={handleClick}
+    >
       {icon && <div className="mr-2">{icon}</div>}
       
-      {children}
+      {label}
     </div>
   )
 }
