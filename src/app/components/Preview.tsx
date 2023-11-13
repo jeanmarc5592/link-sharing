@@ -1,10 +1,11 @@
 import React from 'react'
+import PhoneMockup from '../common/components/icons/PhoneMockup'
 
 const Preview = () => {
   return (
-    <div>
-      Preview
-    </div>
+    <>
+      <PhoneMockup />
+    </>
   )
 }
 
