@@ -1,9 +1,6 @@
+import { ReactiveIconProps } from "./types";
 
-interface LinkIconProps {
-  isActive?: boolean;
-}
-
-const LinkIcon: React.FC<LinkIconProps> = ({ isActive = false }) => {
+const LinkIcon: React.FC<ReactiveIconProps> = ({ isActive = false }) => {
   const fillStyle = isActive ? "#633CFF" : "#737373";
 
   return (

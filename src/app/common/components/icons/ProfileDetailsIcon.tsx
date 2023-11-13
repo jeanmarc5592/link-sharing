@@ -1,8 +1,6 @@
-interface ProfileDetailIconProps {
-  isActive?: boolean;
-}
+import { ReactiveIconProps } from "./types";
 
-const ProfileDetailsIcon: React.FC<ProfileDetailIconProps> = ({ isActive = false }) => {
+const ProfileDetailsIcon: React.FC<ReactiveIconProps> = ({ isActive = false }) => {
   const fillStyle = isActive ? "#633CFF" : "#737373";
 
   return (
