@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({ children, variant = "primary", isLoadin
 
   return (
     <button
-      className={clsx("mb-6 py-3 px-6 rounded-md transition-all w-full sm:px-12", variantStyle[variant], className)}
+      className={clsx("py-3 px-6 rounded-md transition-all w-full sm:px-12", variantStyle[variant], className)}
       {...restProps}
     >
       {isLoading ? <LoadingSpinner /> : children}
