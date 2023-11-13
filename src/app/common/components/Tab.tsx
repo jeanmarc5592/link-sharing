@@ -13,7 +13,7 @@ interface TabProps {
 const Tab: React.FC<TabProps> = ({ label, id, icon, isActive = false }) => {
   const dispatch = useAppDispatch();
 
-  const defaultStyle = "flex items-center font-semibold text-custom-gray py-3 px-6 mr-4 cursor-pointer rounded-md transition-all"
+  const defaultStyle = "flex items-center font-semibold text-custom-gray py-3 px-6 cursor-pointer rounded-md transition-all sm:mr-4"
   const activeStyle = "bg-custom-purple-light text-custom-purple";
 
   const handleClick = () => {
@@ -25,9 +25,9 @@ const Tab: React.FC<TabProps> = ({ label, id, icon, isActive = false }) => {
       className={clsx(defaultStyle, isActive && activeStyle)}
       onClick={handleClick}
     >
-      {icon && <div className="mr-2">{icon}</div>}
+      {icon && <div className="sm:mr-2">{icon}</div>}
       
-      {label}
+      <span className="hidden sm:block">{label}</span>
     </div>
   )
 }

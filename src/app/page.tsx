@@ -13,7 +13,7 @@ const HomePage = async () => {
   }
   
   return (
-    <main className="p-4">
+    <main>
       <Header />
       <HomePageContent />
       <LogoutButton />
