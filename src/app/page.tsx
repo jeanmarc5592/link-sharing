@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import LogoutButton from "./auth/components/LogoutButton";
 import { authOptions } from "@/lib/auth/options";
 import Header from "./common/components/Header";
+import HomePageContent from "./components/HomePageContent";
 
 const HomePage = async () => {
   const session = await getServerSession(authOptions);
@@ -14,7 +15,7 @@ const HomePage = async () => {
   return (
     <main className="p-4">
       <Header />
-      
+      <HomePageContent />
       <LogoutButton />
     </main>
   )
