@@ -45,6 +45,7 @@ const LoginForm = () => {
           />
 
           <Button
+            className="mb-6"
             type="submit"
             isLoading={isLoading}
           >
