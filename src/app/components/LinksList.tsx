@@ -2,22 +2,17 @@
 
 import Typography from "../common/components/Typography"
 import EmptyLinksIcon from "../common/components/icons/EmptyLinksIcon"
-import { useQuery } from "@tanstack/react-query"
-import { getLinks } from "../services/links"
-import LoadingSpinner from "../common/components/LoadingSpinner"
+import SingleLink from "./SingleLink"
+import { Link } from "@prisma/client"
 
-const LinksList = () => {
-  const { error, data, isLoading } = useQuery({
-    queryKey: ['links'],
-    queryFn: getLinks,
-    enabled: true,
-  });
+interface LinksListProps {
+  links?: Link[];
+}
 
+const LinksList: React.FC<LinksListProps> = ({ links }) => {
   return (
     <div className="w-full bg-custom-gray-light rounded-md p-10 mb-6 flex flex-col justify-center items-center">
-      {isLoading && <LoadingSpinner />}
-
-      {(data && data.length === 0) && (
+      {(links && links.length === 0) && (
         <>
           <EmptyLinksIcon />
           <Typography variant="Heading M" className="mt-10 mb-5">Let&apos;s get you started</Typography>
@@ -27,11 +22,11 @@ const LinksList = () => {
         </>
       )}
       
-      {data && data.length > 0 && (
-        <pre>
-          {JSON.stringify(data, null, 2)}
-        </pre>
-      )}
+      {links && links.length > 0 && links.map((link) => {
+        return (
+          <SingleLink key={link.id} />
+        )
+      })}
     </div>
   )
 }

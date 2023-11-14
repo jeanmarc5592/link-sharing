@@ -1,8 +1,18 @@
+"use client"
+
 import Typography from '../common/components/Typography'
 import Button from '../common/components/Button'
 import LinksList from './LinksList'
+import { useQuery } from '@tanstack/react-query'
+import { getLinks } from '../services/links'
 
 const Links = () => {
+  const { error, data, isLoading } = useQuery({
+    queryKey: ['links'],
+    queryFn: getLinks,
+    enabled: true,
+  });
+
   const addNewLink = () => {
     // TODO: Implement adding logic
   };
@@ -12,7 +22,7 @@ const Links = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <Typography variant="Heading M" className="mb-4">Customize your links</Typography>
       <Typography className="mb-12">Add/edit/remove links below and then share all your profiles with the world!</Typography>
       <Button 
@@ -23,15 +33,19 @@ const Links = () => {
         + Add new link
       </Button> 
 
-      <LinksList />
+      <LinksList links={data} />
 
-      <div className="border-t pt-4 pr-6 -mx-6 flex justify-end">
+      <div className="border-t pt-4 pr-6 -mx-6 mt-auto flex justify-end">
         <div className="w-fit">
-          {/* TODO: Adjust "disabled" attribute (when links list is empty) */}
-          <Button disabled onClick={handleSave}>Save</Button>
+          <Button 
+            disabled={!data || data.length === 0} 
+            onClick={handleSave}
+          >
+            Save
+          </Button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
