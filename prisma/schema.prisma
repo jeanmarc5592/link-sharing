@@ -19,7 +19,6 @@ model User {
 
 model Link {
   id        String   @id @default(uuid())
-  name      String
   platform  Platform
   href      String
   User      User @relation(fields: [userId], references: [id])
