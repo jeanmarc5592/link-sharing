@@ -1,4 +1,3 @@
-import React from 'react'
 import Typography from '../common/components/Typography'
 import Button from '../common/components/Button'
 import LinksList from './LinksList'
@@ -19,8 +18,10 @@ const Links = () => {
       <Button 
         className="mb-6"
         variant="secondary" 
-        onClick={addNewLink
-      }>+ Add new link</Button> 
+        onClick={addNewLink}
+      >
+        + Add new link
+      </Button> 
 
       <LinksList />
 
