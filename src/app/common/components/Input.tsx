@@ -3,7 +3,7 @@
 import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
 import Typography from "./Typography";
-import { FieldValues, UseFormRegister, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 interface InputProps {
   label: string;

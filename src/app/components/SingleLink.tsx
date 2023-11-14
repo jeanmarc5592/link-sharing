@@ -8,7 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LinkSchemaType, linkSchema } from "@/lib/validators/link";
 import LinkIcon from "../common/components/icons/LinkIcon";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { updateLink } from "@/lib/store/slices/linksSlice";
 

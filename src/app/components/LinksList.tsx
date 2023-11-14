@@ -4,7 +4,6 @@ import Typography from "../common/components/Typography"
 import EmptyLinksIcon from "../common/components/icons/EmptyLinksIcon"
 import { useAppSelector } from "../common/hooks/useAppSelector"
 import SingleLink from "./SingleLink"
-import { Link } from "@prisma/client"
 
 const LinksList = () => {
   const { list: links } = useAppSelector((state) => state.links);
