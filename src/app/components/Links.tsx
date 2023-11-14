@@ -5,13 +5,26 @@ import Button from '../common/components/Button'
 import LinksList from './LinksList'
 import { useQuery } from '@tanstack/react-query'
 import { getLinks } from '../services/links'
+import { useEffect } from 'react'
+import { useAppDispatch } from '../common/hooks/useAppDispatch'
+import { setList } from '@/lib/store/slices/linksSlice'
 
 const Links = () => {
-  const { error, data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['links'],
     queryFn: getLinks,
     enabled: true,
   });
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    dispatch(setList(data));
+  }, [data, dispatch])
 
   const addNewLink = () => {
     // TODO: Implement adding logic
@@ -33,7 +46,7 @@ const Links = () => {
         + Add new link
       </Button> 
 
-      <LinksList links={data} />
+      <LinksList />
 
       <div className="border-t pt-4 pr-6 -mx-6 mt-auto flex justify-end">
         <div className="w-fit">

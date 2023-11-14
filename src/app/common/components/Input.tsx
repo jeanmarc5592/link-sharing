@@ -3,7 +3,7 @@
 import { DetailedHTMLProps, InputHTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
 import Typography from "./Typography";
-import { useFormContext } from "react-hook-form";
+import { FieldValues, UseFormRegister, useFormContext } from "react-hook-form";
 
 interface InputProps {
   label: string;
@@ -27,10 +27,11 @@ const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon,
 
       <div className="relative mb-6">
         {icon && (
-          <div className="absolute top-4 left-0 flex items-center pl-3.5 pointer-events-none">
+          <div className="absolute top-3.5 left-0 flex items-center pl-3.5 pointer-events-none">
             {icon}
           </div>
         )}
+
         <input 
           {...register(validationName)}
           id={label.toLowerCase()} 
@@ -43,6 +44,7 @@ const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon,
           } 
           {...inputProps}
         />
+
         {error && <Typography variant="Body S" className="text-custom-red">{error}</Typography>}
       </div>
     </div>
