@@ -1,9 +1,11 @@
 import homeTabsReducer from './slices/homeTabsSlice'
+import linksReducer from './slices/linksSlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const store = configureStore({
   reducer: {
     homeTabs: homeTabsReducer,
+    links: linksReducer,
   },
 })
 
