@@ -3,6 +3,7 @@ import { Instrument_Sans } from 'next/font/google'
 import './globals.css'
 import ToastProvider from './common/providers/ToastProvider'
 import StoreProvider from './common/providers/StoreProvider'
+import QueryProvider from './common/providers/QueryProvider'
 
 const instrumentSans = Instrument_Sans({ subsets: ['latin'] })
 
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body className="bg-custom-gray-light">
         <ToastProvider>
           <StoreProvider>
-            {children}
+            <QueryProvider>
+              {children}
+            </QueryProvider>
           </StoreProvider>
         </ToastProvider>
       </body>
