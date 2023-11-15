@@ -37,7 +37,7 @@ const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon,
           id={label.toLowerCase()} 
           className={
             clsx(
-              "border border-custom-gray-lighter rounded-md focus:border-custom-purple focus-visible:outline-none hover:border-custom-purple focus:text-custom-black block w-full p-2.5 mb-1", 
+              "border border-custom-gray-lighter rounded-md focus:border-custom-purple focus-visible:outline-none focus:text-custom-black block w-full p-2.5 mb-1", 
               error && "text-custom-red border-custom-red focus:border-custom-red",
               icon && "pl-10",
             )

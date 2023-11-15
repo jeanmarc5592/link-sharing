@@ -1,12 +1,13 @@
 import { Platform } from "@prisma/client";
+import { ReactNode } from "react";
 
 export interface PlatformObject {
   id: Platform;
+  icon?: ReactNode;
 }
 
 const mapPlatforms = (enumObj: Record<string, string>): PlatformObject[] => {
   const platformKeys = Object.keys(enumObj);
-
   return platformKeys.map((key) => ({ id: enumObj[key] as Platform }));
 }
 

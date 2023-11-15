@@ -1,9 +1,22 @@
-import { Fragment, } from 'react'
+import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { clsx } from 'clsx'
 import { PlatformObject } from '../../../lib/constants/platforms';
 import { StringUtils } from '@/lib/utils/string';
+import GitHubIcon from './icons/GitHubIcon';
+import FrontendMentorIcon from './icons/FrontendMentorIcon';
+import TwitterIcon from './icons/TwitterIcon';
+import LinkedinIcon from './icons/LinkedinIcon';
+import YoutubeIcon from './icons/YoutubeIcon';
+import FacebookIcon from './icons/FacebookIcon';
+import TwitchIcon from './icons/TwitchIcon';
+import DevtoIcon from './icons/DevtoIcon';
+import CodewarsIcon from './icons/CodewarsIcon';
+import FreecodecampIcon from './icons/FreecodecampIcon';
+import GitlabIcon from './icons/GitlabIcon';
+import HashnodeIcon from './icons/HashnodeIcon';
+import StackoverflowIcon from './icons/StackoverflowIcon';
 
 interface DropdownProps {
   label: string;
@@ -11,6 +24,39 @@ interface DropdownProps {
   selected: PlatformObject;
   setSelected: (platformObject: PlatformObject) => void;
 }
+
+const renderPlatformIcon = (platform: PlatformObject) => {
+  switch (platform.id) {
+    case "GITHUB": 
+      return <GitHubIcon />;
+    case "FRONTENDMENTOR":
+      return <FrontendMentorIcon />;
+    case "TWITTER":
+      return <TwitterIcon />;
+    case "LINKEDIN":
+      return <LinkedinIcon />;
+    case "YOUTUBE":
+      return <YoutubeIcon />;
+    case "FACEBOOK":
+      return <FacebookIcon />;
+    case "TWITCH":
+      return <TwitchIcon />;
+    case "DEVTO":
+      return <DevtoIcon />;
+    case "CODEWARS":
+      return <CodewarsIcon />;
+    case "FREECODECAMP":
+      return <FreecodecampIcon />;
+    case "GITLAB":
+      return <GitlabIcon />;
+    case "HASHNODE":
+      return <HashnodeIcon />;
+    case "STACKOVERFLOW":
+      return <StackoverflowIcon />;
+    default:
+      return <></>;
+  }
+};
 
 const Dropdown: React.FC<DropdownProps> = ({ label, data, selected, setSelected }) => {
   return (
@@ -20,9 +66,11 @@ const Dropdown: React.FC<DropdownProps> = ({ label, data, selected, setSelected 
           <>
             <Listbox.Label className="block text-custom-gray">{label}</Listbox.Label>
             <div className="relative mt-2">
-              <Listbox.Button className="relative w-full cursor-pointer bg-white py-2.5 pl-3.5 pr-10 text-left text-custom-black border border-custom-gray-lighter custom-black rounded-md focus:border-custom-purple hover:border-custom-purple">
+              <Listbox.Button className="relative w-full cursor-pointer bg-white py-2.5 pl-3.5 pr-10 text-left text-custom-black border border-custom-gray-lighter custom-black rounded-md focus:border-custom-purple">
                 <span className="flex items-center">
-                  <span className="block truncate">{StringUtils.capitalize(selected.id)}</span>
+                  <span className="flex items-center truncate">
+                    <span className="mr-1">{renderPlatformIcon(selected)}</span> {StringUtils.capitalize(selected.id)}
+                  </span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                     <ChevronUpDownIcon className="h-5 w-5 text-custom-gray" aria-hidden="true" />
                   </span>
@@ -46,10 +94,8 @@ const Dropdown: React.FC<DropdownProps> = ({ label, data, selected, setSelected 
                       {({ selected, active }) => (
                         <>
                           <div className="flex items-center cursor-pointer">
-                            <span
-                              className={clsx(selected ? 'text-custom-purple' : 'text-custom-black', 'block truncate')}
-                            >
-                              {StringUtils.capitalize(element.id)} {selected && "(Selected)"}
+                            <span className={clsx(selected ? 'text-custom-purple' : 'text-custom-black', 'flex items-center truncate')}>
+                              <span className="mr-1">{renderPlatformIcon(element)}</span> {StringUtils.capitalize(element.id)} {selected && "(Selected)"}
                             </span>
                             {selected ? (
                             <span
