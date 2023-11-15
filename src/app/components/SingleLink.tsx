@@ -50,7 +50,7 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
 
         <Dropdown
           label="Platform"
-          selected={{ id: linkData.platform }}
+          selectedEl={{ id: linkData.platform }}
           setSelected={updatePlatform}
           data={PLATFORMS}
         />
