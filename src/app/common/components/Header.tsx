@@ -24,13 +24,13 @@ const Header = () => {
           label="Links"
           id="links"
           isActive={activeTab === "links"}
-          icon={<LinkIcon isActive={activeTab === "links"} />}
+          icon={<LinkIcon isSelected={activeTab === "links"} />}
         />
         <Tab
           label="Profile Details"
           id="profile"
           isActive={activeTab === "profile"}
-          icon={<ProfileDetailsIcon isActive={activeTab === "profile"} />}
+          icon={<ProfileDetailsIcon isSelected={activeTab === "profile"} />}
         />
       </div>
 
