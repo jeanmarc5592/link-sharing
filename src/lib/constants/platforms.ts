@@ -3,7 +3,6 @@ import { ReactNode } from "react";
 
 export interface PlatformObject {
   id: Platform;
-  icon?: ReactNode;
 }
 
 const mapPlatforms = (enumObj: Record<string, string>): PlatformObject[] => {
