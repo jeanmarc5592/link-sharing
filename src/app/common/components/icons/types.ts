@@ -1,3 +1,3 @@
 export interface ReactiveIconProps {
-  isActive?: boolean;
+  isSelected?: boolean;
 }

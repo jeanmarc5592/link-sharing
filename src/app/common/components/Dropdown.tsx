@@ -28,31 +28,31 @@ interface DropdownProps {
 const renderPlatformIcon = (platform: PlatformObject, isSelected?: boolean,) => {
   switch (platform.id) {
     case "GITHUB": 
-      return <GitHubIcon />;
+      return <GitHubIcon isSelected={isSelected} />;
     case "FRONTENDMENTOR":
-      return <FrontendMentorIcon />;
+      return <FrontendMentorIcon isSelected={isSelected} />;
     case "TWITTER":
-      return <TwitterIcon />;
+      return <TwitterIcon isSelected={isSelected} />;
     case "LINKEDIN":
-      return <LinkedinIcon />;
+      return <LinkedinIcon isSelected={isSelected} />;
     case "YOUTUBE":
-      return <YoutubeIcon />;
+      return <YoutubeIcon isSelected={isSelected} />;
     case "FACEBOOK":
-      return <FacebookIcon />;
+      return <FacebookIcon isSelected={isSelected} />;
     case "TWITCH":
-      return <TwitchIcon />;
+      return <TwitchIcon isSelected={isSelected} />;
     case "DEVTO":
-      return <DevtoIcon />;
+      return <DevtoIcon isSelected={isSelected} />;
     case "CODEWARS":
-      return <CodewarsIcon />;
+      return <CodewarsIcon isSelected={isSelected} />;
     case "FREECODECAMP":
-      return <FreecodecampIcon />;
+      return <FreecodecampIcon isSelected={isSelected} />;
     case "GITLAB":
-      return <GitlabIcon />;
+      return <GitlabIcon isSelected={isSelected} />;
     case "HASHNODE":
-      return <HashnodeIcon />;
+      return <HashnodeIcon isSelected={isSelected} />;
     case "STACKOVERFLOW":
-      return <StackoverflowIcon />;
+      return <StackoverflowIcon isSelected={isSelected} />;
     default:
       return <></>;
   }
@@ -95,8 +95,8 @@ const Dropdown: React.FC<DropdownProps> = ({ label, data, selectedEl, setSelecte
                         value={element}
                       >
                         <div className="flex items-center cursor-pointer">
-                          <span className={clsx(isSelected ? 'text-custom-purple font-semibold' : 'text-custom-black', 'flex items-center truncate')}>
-                            <span className="mr-1">{renderPlatformIcon(element)}</span> {StringUtils.capitalize(element.id)} {isSelected && "(Selected)"}
+                          <span className={clsx(isSelected ? 'text-custom-purple' : 'text-custom-black', 'flex items-center truncate')}>
+                            <span className="mr-1">{renderPlatformIcon(element, isSelected)}</span> {StringUtils.capitalize(element.id)} {isSelected && "(Selected)"}
                           </span>
                           {isSelected && <span className="absolute inset-y-0 right-0 flex items-center pr-4" />}
                          </div>
