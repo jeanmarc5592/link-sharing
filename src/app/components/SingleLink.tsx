@@ -11,6 +11,7 @@ import LinkIcon from "../common/components/icons/LinkIcon";
 import { ChangeEvent } from "react";
 import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { updateLink } from "@/lib/store/slices/linksSlice";
+import { PLATFORMS, PlatformObject } from '../../lib/constants/platforms';
 
 interface SingleLinkProps {
   linkData: Link;
@@ -19,13 +20,12 @@ interface SingleLinkProps {
 
 const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
   const dispatch = useAppDispatch();
-
-  const { href } = linkData;
   const methods = useForm<LinkSchemaType>({
     resolver: zodResolver(linkSchema),
   });
 
   const { formState: { errors }} = methods;
+  const { href } = linkData;
 
   const handleRemove = () => {
     // TODO: Implement removing logic
@@ -35,6 +35,10 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
     dispatch(updateLink({ link: { ...linkData, href: e.target.value }, index }))
   };
 
+  const updatePlatform = (platformObject: PlatformObject) => {
+    dispatch(updateLink({ link: { ...linkData, platform: platformObject.id }, index }));
+  }
+
   return (
     <div className="w-full bg-custom-gray-light rounded-md p-6 mb-6">
       <FormProvider {...methods}>
@@ -42,6 +46,13 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
           <Typography className="font-semibold">Link #{index + 1}</Typography>
           <button onClick={handleRemove} className="text-custom-gray">Remove</button>
         </div>
+
+        <Dropdown
+          label="Platform"
+          selected={{ id: linkData.platform }}
+          setSelected={updatePlatform}
+          data={PLATFORMS}
+        />
 
         <Input 
           label="Link" 
