@@ -1,19 +1,27 @@
-import prisma from "@/lib/db/prisma";
-import { getToken } from "next-auth/jwt";
+import { AuthService } from "@/server/services/auth";
+import { HttpService } from "@/server/services/http";
+import { LinksService } from "@/server/services/links";
 import { NextResponse } from "next/server";
 
-const secret = process.env.NEXTAUTH_SECRET;
-
 export const GET = async (req: any) => {
-  const token = await getToken({ req, secret });
+  const httpService = new HttpService();
+  const authService = new AuthService();
+  const linksService = new LinksService();
 
-  // TODO: Secure API (only authenticated requests)
+  const isRequestValid = await authService.validateRequest(req);
 
-  const userId = token?.sub;
+  if (isRequestValid !== "OK") {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
-  const links = await prisma.link.findMany({
-    where: { userId }
-  });
+  const token = await httpService.extractToken(req);
+  const userId = await httpService.getUserIdFromToken(token);
+
+  if (!userId) {
+    return NextResponse.json({ message: 'No "sub" in token' }, { status: 400 });
+  }
+
+  const links = await linksService.getLinksByUser(userId);
 
   return NextResponse.json(links);
 };
