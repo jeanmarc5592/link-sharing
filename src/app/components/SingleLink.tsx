@@ -58,6 +58,7 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
           label="Link" 
           validationName="href" 
           icon={<LinkIcon />} 
+          // TODO: Show errors (currently not working)
           error={errors.href?.message}
           inputProps={{ 
             value: href, 
