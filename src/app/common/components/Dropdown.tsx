@@ -20,7 +20,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, data, selected, setSelected 
           <>
             <Listbox.Label className="block text-custom-gray">{label}</Listbox.Label>
             <div className="relative mt-2">
-              <Listbox.Button className="relative w-full cursor-pointer bg-white py-2.5 pl-3 pr-10 text-left text-custom-black border border-custom-gray-lighter custom-black rounded-md focus:border-custom-purple">
+              <Listbox.Button className="relative w-full cursor-pointer bg-white py-2.5 pl-3.5 pr-10 text-left text-custom-black border border-custom-gray-lighter custom-black rounded-md focus:border-custom-purple hover:border-custom-purple">
                 <span className="flex items-center">
                   <span className="block truncate">{StringUtils.capitalize(selected.id)}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -40,7 +40,7 @@ const Dropdown: React.FC<DropdownProps> = ({ label, data, selected, setSelected 
                   {data.map((element) => (
                     <Listbox.Option
                       key={element.id}
-                      className="relative cursor-default select-none py-2 pl-3 pr-9"
+                      className="relative cursor-default select-none py-2 pl-3.5 pr-9"
                       value={element}
                     >
                       {({ selected, active }) => (
