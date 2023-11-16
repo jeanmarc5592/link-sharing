@@ -13,7 +13,6 @@ const Links = () => {
   const { data, refetch } = useQuery({
     queryKey: ['links'],
     queryFn: getLinks,
-    enabled: true,
   });
 
   const addNewLinkMutation = useMutation({

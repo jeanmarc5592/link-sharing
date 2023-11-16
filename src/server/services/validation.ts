@@ -22,4 +22,16 @@ export class ValidationService {
 
     return "OK";
   }
+
+  validateUUID(uuid: string): null | "OK" {
+    const regex = /^[a-z,0-9,-]{36}$/;
+    const isValid = regex.test(uuid);
+
+    if (!isValid) {
+      console.error("UUID is not valid", { uuid });
+      return null;
+    }
+
+    return "OK";
+  }
 }

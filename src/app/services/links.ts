@@ -8,3 +8,7 @@ export const getLinks = async () => {
 export const addLink = async () => {
   return httpClient.post<Link>('/links').then(res => res.data);
 }
+
+export const deleteLink = async (linkId: string) => {
+  return httpClient.delete<Link>(`/links/${linkId}`).then(res => res.data);
+}

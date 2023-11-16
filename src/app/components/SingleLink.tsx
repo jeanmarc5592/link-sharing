@@ -13,6 +13,8 @@ import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { updateLink } from "@/lib/store/slices/linksSlice";
 import { PlatformObject, PLATFORMS } from '../../lib/constants/platforms';
 import GitHubIcon from "../common/components/icons/GitHubIcon";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { deleteLink, getLinks } from "../services/links";
 
 interface SingleLinkProps {
   linkData: Link;
@@ -20,7 +22,20 @@ interface SingleLinkProps {
 }
 
 const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
+  const { refetch } = useQuery({
+    queryKey: ['links'],
+    queryFn: getLinks,
+  });
+  
+  const deleteLinkMutation = useMutation({
+    mutationKey: ['links'],
+    mutationFn: (linkId: string) => {
+      return deleteLink(linkId);
+    }
+  });
+
   const dispatch = useAppDispatch();
+  
   const methods = useForm<LinkSchemaType>({
     resolver: zodResolver(linkSchema),
   });
@@ -28,8 +43,14 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
   const { formState: { errors }} = methods;
   const { href } = linkData;
 
-  const handleRemove = () => {
-    // TODO: Implement removing logic
+  const handleRemove = async () => {
+    try {
+      await deleteLinkMutation.mutateAsync(linkData.id);
+      refetch();
+    } catch (error) {
+      console.error(error);
+      // TODO: Render error notification
+    }
   };
 
   const updateHref = (e: ChangeEvent<HTMLInputElement>) => {

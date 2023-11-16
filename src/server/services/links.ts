@@ -9,10 +9,16 @@ export class LinksService {
     this.prisma = prisma;
   }
 
-  async getLinksByUser(userId: string): Promise<Link[]> {
-    return await this.prisma.link.findMany({
-      where: { userId }
-    });
+  async getLinksByUser(userId: string): Promise<Link[] | null> {
+    try {
+      const links = await this.prisma.link.findMany({
+        where: { userId }
+      });
+      return links;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   async addNewLink(userId: string): Promise<Link | null> {
@@ -25,6 +31,20 @@ export class LinksService {
         }
       });
       return createdLink;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async deleteLink(linkId: string): Promise<Link | null> {
+    try {
+      const deletedLink = await prisma.link.delete({
+        where: {
+          id: linkId,
+        }
+      });
+      return deletedLink;
     } catch (error) {
       console.error(error);
       return null;
