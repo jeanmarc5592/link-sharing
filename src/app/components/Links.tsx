@@ -3,17 +3,22 @@
 import Typography from '../common/components/Typography'
 import Button from '../common/components/Button'
 import LinksList from './LinksList'
-import { useQuery } from '@tanstack/react-query'
-import { getLinks } from '../services/links'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { addLink, getLinks } from '../services/links'
 import { useEffect } from 'react'
 import { useAppDispatch } from '../common/hooks/useAppDispatch'
 import { setList } from '@/lib/store/slices/linksSlice'
 
 const Links = () => {
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['links'],
     queryFn: getLinks,
     enabled: true,
+  });
+
+  const addNewLinkMutation = useMutation({
+    mutationKey: ['links'],
+    mutationFn: addLink,
   });
 
   const dispatch = useAppDispatch();
@@ -26,8 +31,14 @@ const Links = () => {
     dispatch(setList(data));
   }, [data, dispatch])
 
-  const addNewLink = () => {
-    // TODO: Implement adding logic
+  const addNewLink = async () => {
+    try {
+      await addNewLinkMutation.mutateAsync();
+      refetch();
+    } catch (error) {
+      console.error(error);
+      // TODO: Render error notification
+    }
   };
 
   const handleSave = () => {
