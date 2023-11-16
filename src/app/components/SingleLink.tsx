@@ -1,6 +1,6 @@
 "use client"
 
-import { Link, Platform } from "@prisma/client"
+import { Link } from "@prisma/client"
 import Typography from "../common/components/Typography"
 import Input from "../common/components/Input";
 import Dropdown from "../common/components/Dropdown";
@@ -12,7 +12,6 @@ import { ChangeEvent } from "react";
 import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { updateLink } from "@/lib/store/slices/linksSlice";
 import { PlatformObject, PLATFORMS } from '../../lib/constants/platforms';
-import GitHubIcon from "../common/components/icons/GitHubIcon";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteLink, getLinks } from "../services/links";
 
