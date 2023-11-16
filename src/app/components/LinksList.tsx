@@ -9,7 +9,7 @@ const LinksList = () => {
   const { list: links } = useAppSelector((state) => state.links);
 
   return (
-    <>
+    <div className="max-h-[35vh] overflow-auto sm:max-h-[50vh]">
       {(links && links.length === 0) && (
         <div className="flex flex-col justify-center items-center w-full bg-custom-gray-light rounded-md p-6 mb-6">
           <EmptyLinksIcon />
@@ -25,7 +25,7 @@ const LinksList = () => {
           <SingleLink key={link.id} linkData={link} index={index} />
         )
       })}
-    </>
+    </div>
   )
 }
 
