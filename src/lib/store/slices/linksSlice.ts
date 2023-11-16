@@ -17,11 +17,6 @@ export const linksSlice = createSlice({
     setList: (state, action: PayloadAction<Link[]>) => {
       state.list = action.payload;
     },
-    addLink: (state, action: PayloadAction<Link>) => {
-      if (state.list) {
-        state.list = state.list.concat(action.payload);
-      }
-    },
     updateLink: (state, action: PayloadAction<{ index: number, link: Link}>) => {
       if (state.list) {
         Object.assign(state.list[action.payload.index], action.payload.link);
@@ -30,6 +25,6 @@ export const linksSlice = createSlice({
   }
 });
 
-export const { setList, addLink, updateLink } = linksSlice.actions;
+export const { setList, updateLink } = linksSlice.actions;
 
 export default linksSlice.reducer;
