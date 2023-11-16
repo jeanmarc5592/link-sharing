@@ -8,6 +8,7 @@ import { addLink, getLinks } from '../services/links'
 import { useEffect } from 'react'
 import { useAppDispatch } from '../common/hooks/useAppDispatch'
 import { setList } from '@/lib/store/slices/linksSlice'
+import { toast } from 'react-toastify'
 
 const Links = () => {
   const { data, refetch } = useQuery({
@@ -36,7 +37,7 @@ const Links = () => {
       refetch();
     } catch (error) {
       console.error(error);
-      // TODO: Render error notification
+      toast.error('Something went wrong adding a new link. Please try again.');
     }
   };
 

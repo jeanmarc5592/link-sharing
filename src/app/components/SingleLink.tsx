@@ -14,6 +14,7 @@ import { updateLink } from "@/lib/store/slices/linksSlice";
 import { PlatformObject, PLATFORMS } from '../../lib/constants/platforms';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteLink, getLinks } from "../services/links";
+import { toast } from "react-toastify";
 
 interface SingleLinkProps {
   linkData: Link;
@@ -48,7 +49,7 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
       refetch();
     } catch (error) {
       console.error(error);
-      // TODO: Render error notification
+      toast.error('Something went wrong deleting your link. Please try again.');
     }
   };
 
