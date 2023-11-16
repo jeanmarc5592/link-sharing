@@ -5,6 +5,7 @@ import { ValidationService } from "./validation";
 import { User } from "@prisma/client";
 import { signupSchema } from "@/lib/validators/signup";
 import { HttpService } from "./http";
+import { NextRequestWithAuth } from "next-auth/middleware";
 
 export class AuthService {
   private usersService: UsersService;
@@ -83,7 +84,7 @@ export class AuthService {
     }
   }
 
-  async validateRequest(req: any): Promise<"OK" | null> {
+  async validateRequest(req: NextRequestWithAuth): Promise<"OK" | null> {
     const token = await this.httpService.extractToken(req);
 
     if (!token) {
