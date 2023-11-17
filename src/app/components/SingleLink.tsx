@@ -15,6 +15,7 @@ import { PlatformObject, PLATFORMS } from '../../lib/constants/platforms';
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteLink, getLinks } from "../services/links";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../common/components/LoadingSpinner";
 
 interface SingleLinkProps {
   linkData: Link;
@@ -22,7 +23,7 @@ interface SingleLinkProps {
 }
 
 const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
-  const { refetch } = useQuery({
+  const getLinksQuery = useQuery({
     queryKey: ['links'],
     queryFn: getLinks,
   });
@@ -46,7 +47,7 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
   const handleRemove = async () => {
     try {
       await deleteLinkMutation.mutateAsync(linkData.id);
-      refetch();
+      getLinksQuery.refetch();
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong deleting your link. Please try again.');
@@ -66,7 +67,12 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
       <FormProvider {...methods}>
         <div className="w-full flex justify-between mb-4">
           <Typography className="font-semibold">Link #{index + 1}</Typography>
-          <button onClick={handleRemove} className="text-custom-gray hover:text-custom-purple transition-all">Remove</button>
+          <button 
+            onClick={handleRemove} 
+            className="text-custom-gray hover:text-custom-purple transition-all"
+            >
+              {deleteLinkMutation.isLoading ? <LoadingSpinner variant="secondary" /> : "Remove"}
+          </button>
         </div>
 
         <Dropdown

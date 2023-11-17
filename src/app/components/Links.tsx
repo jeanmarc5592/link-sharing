@@ -10,9 +10,10 @@ import { useAppDispatch } from '../common/hooks/useAppDispatch'
 import { ModifiedLink, setList } from '@/lib/store/slices/linksSlice'
 import { toast } from 'react-toastify'
 import { useAppSelector } from '../common/hooks/useAppSelector'
+import LinksListSkeleton from './LinksListSkeleton'
 
 const Links = () => {
-  const { data, refetch } = useQuery({
+  const getLinksQuery = useQuery({
     queryKey: ['links'],
     queryFn: getLinks,
   });
@@ -35,17 +36,17 @@ const Links = () => {
   const modifiedLinks = links?.filter((link) => link.isModified);
 
   useEffect(() => {
-    if (!data) {
+    if (!getLinksQuery.data) {
       return;
     }
 
-    dispatch(setList(data));
-  }, [data, dispatch])
+    dispatch(setList(getLinksQuery.data));
+  }, [getLinksQuery.data, dispatch])
 
   const addNewLink = async () => {
     try {
       await addNewLinkMutation.mutateAsync();
-      refetch();
+      getLinksQuery.refetch();
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong adding a new link. Please try again.');
@@ -59,7 +60,7 @@ const Links = () => {
       }
 
       await editLinksMutation.mutateAsync(modifiedLinks);
-      refetch();
+      getLinksQuery.refetch();
 
       toast.success('Your links have been saved successfully!');
     } catch (error) {
@@ -76,17 +77,19 @@ const Links = () => {
         className="mb-6"
         variant="secondary" 
         onClick={addNewLink}
+        isLoading={addNewLinkMutation.isLoading}
       >
         + Add new link
       </Button> 
 
-      <LinksList />
+      {getLinksQuery.isLoading  ? <LinksListSkeleton /> : <LinksList /> }
 
       <div className="border-t pt-4 pr-6 -mx-6 mt-auto flex justify-end">
         <div className="w-fit">
           <Button 
-            disabled={!data || data.length === 0 || !modifiedLinks || modifiedLinks.length === 0} 
+            disabled={!getLinksQuery.data || getLinksQuery.data.length === 0 || !modifiedLinks || modifiedLinks.length === 0} 
             onClick={handleSave}
+            isLoading={editLinksMutation.isLoading}
           >
             Save
           </Button>
