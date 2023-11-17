@@ -53,6 +53,7 @@ const SignupForm = () => {
           />
 
           <Button 
+            className="mb-6"
             isLoading={isLoading} 
             type="submit"
           >

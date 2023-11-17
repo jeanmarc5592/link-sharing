@@ -4,6 +4,8 @@ import { UsersService } from "./users";
 import { ValidationService } from "./validation";
 import { User } from "@prisma/client";
 import { signupSchema } from "@/lib/validators/signup";
+import { HttpService } from "./http";
+import { NextRequestWithAuth } from "next-auth/middleware";
 
 export class AuthService {
   private usersService: UsersService;
@@ -12,10 +14,13 @@ export class AuthService {
 
   private validationService: ValidationService;
 
+  private httpService: HttpService;
+
   constructor() {
     this.usersService = new UsersService();
     this.cryptographyService = new CryptographyService();
     this.validationService = new ValidationService();
+    this.httpService = new HttpService();
   }
 
   async login(credentials: Record<"email" | "password", string> | undefined): Promise<Pick<User, "id" | "email"> | null> {
@@ -77,5 +82,23 @@ export class AuthService {
       id: user.id,
       email: user.email,
     }
+  }
+
+  async validateRequest(req: NextRequestWithAuth): Promise<"OK" | null> {
+    const token = await this.httpService.extractToken(req);
+
+    if (!token) {
+      console.error("No token in request");
+      return null;
+    }
+
+    const isTokenValid = await this.httpService.validateToken(token);
+
+    if (!isTokenValid) {
+      console.error("Token is not valid");
+      return null;
+    }
+
+    return "OK";
   }
 }

@@ -1,12 +1,12 @@
-import { ZodEffects, ZodObject } from "zod";
+import { ZodArray, ZodEffects, ZodError, ZodObject } from "zod";
 
 export class ValidationService {
-  validateSchema(schema: ZodObject<any> | ZodEffects<ZodObject<any>>, input: any): null | "OK" {
+  validateSchema(schema: ZodObject<any> | ZodEffects<ZodObject<any>> | ZodArray<any>, input: any): ZodError | "OK" {
     const result = schema.safeParse(input);
 
     if (!result.success) {
       console.error("Schema is not valid", result.error);
-      return null;
+      return result.error;
     }
 
     return "OK";
@@ -17,6 +17,18 @@ export class ValidationService {
 
     if (!isEqual) {
       console.error("Strings are not equal", { stringOne, stringTwo });
+      return null;
+    }
+
+    return "OK";
+  }
+
+  validateUUID(uuid: string): null | "OK" {
+    const regex = /^[a-z,0-9,-]{36}$/;
+    const isValid = regex.test(uuid);
+
+    if (!isValid) {
+      console.error("UUID is not valid", { uuid });
       return null;
     }
 

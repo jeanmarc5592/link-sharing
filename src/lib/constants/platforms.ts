@@ -1,19 +1,13 @@
-export type Platform = {
-  id: number;
-  name: string;
+import { Platform } from "@prisma/client";
+import { ReactNode } from "react";
+
+export interface PlatformObject {
+  id: Platform;
 }
 
-export const PLATFORMS: Platform[] = [
-  {
-    id: 1,
-    name: "YouTube",
-  },
-  {
-    id: 2,
-    name: "GitHub",
-  },
-  {
-    id: 3,
-    name: "Facebook",
-  },
-];
+const mapPlatforms = (enumObj: Record<string, string>): PlatformObject[] => {
+  const platformKeys = Object.keys(enumObj);
+  return platformKeys.map((key) => ({ id: enumObj[key] as Platform }));
+}
+
+export const PLATFORMS = mapPlatforms(Platform);

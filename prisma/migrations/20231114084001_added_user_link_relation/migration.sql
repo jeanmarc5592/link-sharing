@@ -1,0 +1,18 @@
+-- CreateEnum
+CREATE TYPE "Platform" AS ENUM ('GITHUB', 'FRONTENDMENTOR', 'TWITTER', 'LINKEDIN', 'YOUTUBE', 'FACEBOOK', 'TWITCH', 'DEVTO', 'CODEWARS', 'FREECODECAMP', 'GITLAB', 'HASHNODE', 'STACKOVERFLOW');
+
+-- CreateTable
+CREATE TABLE "Link" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "platform" "Platform" NOT NULL,
+    "href" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Link_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Link" ADD CONSTRAINT "Link_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
