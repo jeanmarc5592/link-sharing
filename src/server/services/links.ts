@@ -1,6 +1,6 @@
 import { Link, PrismaClient } from "@prisma/client";
 import prisma from "@/lib/db/prisma";
-import { LinkSchemaType } from "@/lib/validators/link";
+import { ArrayUtils } from "@/lib/utils/array";
 import { ModifiedLink } from "@/lib/store/slices/linksSlice";
 
 export class LinksService {
@@ -15,7 +15,7 @@ export class LinksService {
       const links = await this.prisma.link.findMany({
         where: { userId }
       });
-      return links;
+      return ArrayUtils.sortByCreationDate(links, { order: "DESC" });
     } catch (error) {
       console.error(error);
       return null;
@@ -89,7 +89,6 @@ export class LinksService {
         }
 
         updatedLinks.push(updatedLink);
-
       }));
 
       return updatedLinks;
