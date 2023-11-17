@@ -1,7 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
-import { SeederInterface } from "../types";
 
-export class UsersSeeder implements SeederInterface {
+export class UsersSeeder {
   constructor(private readonly prisma: PrismaClient) {}
 
   async generateOne(): Promise<User> {

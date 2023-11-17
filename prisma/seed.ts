@@ -1,3 +1,4 @@
+import { LinksSeeder } from './seeders/links';
 import { UsersSeeder } from './seeders/users';
 import { PrismaClient } from '@prisma/client';
 
@@ -5,7 +6,10 @@ const prisma = new PrismaClient();
 
 const main = async () => {
   const usersSeeder = new UsersSeeder(prisma);
-  await usersSeeder.generateOne();
+  const user = await usersSeeder.generateOne();
+
+  const linksSeeder = new LinksSeeder(prisma);
+  await linksSeeder.generateOne(user.id);
 };
 
 main()
