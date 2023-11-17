@@ -75,6 +75,10 @@ export const PUT = async (req: NextRequestWithAuth) => {
   if (isBodyValid !== "OK") {
     return NextResponse.json({ ...isBodyValid.errors }, { status: 400 });
   }
+
+  if (body.length > 50) {
+    return NextResponse.json({ message: "Maximum number of 50 links exceeded" }, { status: 400 });
+  }
   
   const editedLinks = await linksService.bulkEditLinks(body);
 
