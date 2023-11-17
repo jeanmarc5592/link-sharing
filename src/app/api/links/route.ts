@@ -27,6 +27,10 @@ export const GET = async (req: NextRequestWithAuth) => {
 
   const links = await linksService.getLinksByUser(userId);
 
+  if (!links) {
+    return NextResponse.json({ message: 'Something went wrong reading your links' }, { status: 500 });
+  }
+
   return NextResponse.json(links);
 };
 
