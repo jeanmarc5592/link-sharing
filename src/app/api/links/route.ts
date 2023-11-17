@@ -1,6 +1,9 @@
+import { ModifiedLink } from "@/lib/store/slices/linksSlice";
+import { editLinkSchema } from "@/lib/validators/link";
 import { AuthService } from "@/server/services/auth";
 import { HttpService } from "@/server/services/http";
 import { LinksService } from "@/server/services/links";
+import { ValidationService } from "@/server/services/validation";
 import { NextRequestWithAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
@@ -52,4 +55,32 @@ export const POST = async (req: NextRequestWithAuth) => {
   }
 
   return NextResponse.json({ ...createdLink }, { status: 201 });
+};
+
+export const PUT = async (req: NextRequestWithAuth) => {
+  const authService = new AuthService();
+  const linksService = new LinksService();
+  const validationService = new ValidationService();
+
+  const isRequestValid = await authService.validateRequest(req);
+
+  if (isRequestValid !== "OK") {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const body: ModifiedLink[] = await req.json();
+
+  const isBodyValid = validationService.validateSchema(editLinkSchema, body);
+
+  if (isBodyValid !== "OK") {
+    return NextResponse.json({ ...isBodyValid.errors }, { status: 400 });
+  }
+  
+  const editedLinks = await linksService.bulkEditLinks(body);
+
+  if (!editedLinks) {
+    return NextResponse.json({ message: 'Something went wrong editing the links' }, { status: 500 });
+  }
+  
+  return NextResponse.json({ ...editedLinks });
 };

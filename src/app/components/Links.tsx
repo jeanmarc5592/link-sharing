@@ -4,11 +4,12 @@ import Typography from '../common/components/Typography'
 import Button from '../common/components/Button'
 import LinksList from './LinksList'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { addLink, getLinks } from '../services/links'
+import { addLink, editLinks, getLinks } from '../services/links'
 import { useEffect } from 'react'
 import { useAppDispatch } from '../common/hooks/useAppDispatch'
-import { setList } from '@/lib/store/slices/linksSlice'
+import { ModifiedLink, setList } from '@/lib/store/slices/linksSlice'
 import { toast } from 'react-toastify'
+import { useAppSelector } from '../common/hooks/useAppSelector'
 
 const Links = () => {
   const { data, refetch } = useQuery({
@@ -21,7 +22,17 @@ const Links = () => {
     mutationFn: addLink,
   });
 
+  const editLinksMutation = useMutation({
+    mutationKey: ['links'],
+    mutationFn: (links: ModifiedLink[]) => {
+      return editLinks(links);
+    }
+  });
+
   const dispatch = useAppDispatch();
+  const links = useAppSelector((state) => state.links.list);
+
+  const modifiedLinks = links?.filter((link) => link.isModified);
 
   useEffect(() => {
     if (!data) {
@@ -41,8 +52,20 @@ const Links = () => {
     }
   };
 
-  const handleSave = () => {
-    // TODO: Implement save logic
+  const handleSave = async () => {
+    try {
+      if (!modifiedLinks) {
+        return;
+      }
+
+      await editLinksMutation.mutateAsync(modifiedLinks);
+      refetch();
+
+      toast.success('Your links have been saved successfully!');
+    } catch (error) {
+      console.error(error);
+      toast.error('Something went editing your link(s). Please try again.');
+    }
   };
 
   return (
@@ -62,7 +85,7 @@ const Links = () => {
       <div className="border-t pt-4 pr-6 -mx-6 mt-auto flex justify-end">
         <div className="w-fit">
           <Button 
-            disabled={!data || data.length === 0} 
+            disabled={!data || data.length === 0 || !modifiedLinks || modifiedLinks.length === 0} 
             onClick={handleSave}
           >
             Save

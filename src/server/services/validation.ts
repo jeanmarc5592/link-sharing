@@ -1,7 +1,7 @@
-import { ZodEffects, ZodError, ZodObject } from "zod";
+import { ZodArray, ZodEffects, ZodError, ZodObject } from "zod";
 
 export class ValidationService {
-  validateSchema(schema: ZodObject<any> | ZodEffects<ZodObject<any>>, input: any): ZodError | "OK" {
+  validateSchema(schema: ZodObject<any> | ZodEffects<ZodObject<any>> | ZodArray<any>, input: any): ZodError | "OK" {
     const result = schema.safeParse(input);
 
     if (!result.success) {

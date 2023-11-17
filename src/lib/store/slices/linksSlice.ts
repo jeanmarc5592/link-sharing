@@ -2,8 +2,12 @@ import { Link } from '@prisma/client';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction }from '@reduxjs/toolkit';
 
+export interface ModifiedLink extends Link {
+  isModified?: boolean;
+}
+
 interface LinksState {
-  list: Link[] | null;
+  list: ModifiedLink[] | null;
 }
 
 const initialState: LinksState = {
@@ -15,11 +19,11 @@ export const linksSlice = createSlice({
   initialState,
   reducers: {
     setList: (state, action: PayloadAction<Link[]>) => {
-      state.list = action.payload;
+      state.list = action.payload.map((link) => ({ ...link, isModified: false }));
     },
     updateLink: (state, action: PayloadAction<{ index: number, link: Link}>) => {
       if (state.list) {
-        Object.assign(state.list[action.payload.index], action.payload.link);
+        Object.assign(state.list[action.payload.index], { ...action.payload.link, isModified: true });
       }
     }
   }

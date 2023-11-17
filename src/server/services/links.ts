@@ -1,6 +1,7 @@
 import { Link, PrismaClient } from "@prisma/client";
 import prisma from "@/lib/db/prisma";
 import { LinkSchemaType } from "@/lib/validators/link";
+import { ModifiedLink } from "@/lib/store/slices/linksSlice";
 
 export class LinksService {
   private readonly prisma: PrismaClient;
@@ -49,5 +50,63 @@ export class LinksService {
       console.error(error);
       return null;
     }
+  }
+
+  async editLink(link: Link): Promise<Link | null> {
+    try {
+      const updatedLink = await prisma.link.update({
+        where: { id: link.id, userId: link.userId },
+        data: { 
+          href: link.href,
+          platform: link.platform,
+        },
+      });
+      return updatedLink;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async bulkEditLinks(links: ModifiedLink[]): Promise<Link[] | null> {
+    if (links.length === 0) {
+      console.error("At least one link is required for bulk edit", links);
+      return null;
+    }
+
+    if (this.checkLinksModification(links) !== "OK") {
+      return null;
+    }
+
+    const updatedLinks: Link[] = [];
+
+    try {
+      await Promise.all(links.map(async (modifiedLink) => {
+        const updatedLink = await this.editLink(modifiedLink);
+
+        if (!updatedLink) {
+          return null;
+        }
+
+        updatedLinks.push(updatedLink);
+
+      }));
+
+      return updatedLinks;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  private checkLinksModification(links: ModifiedLink[]): null | "OK" {
+    const linksAreModified = links.every((link) => link.isModified === true);
+
+    if (!linksAreModified) {
+      console.error("All provided links must be modified", links);
+      return null;
+    }
+
+    return "OK";
   }
 }
