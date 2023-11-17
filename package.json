@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && npx prisma migrate deploy",
     "start:db": "docker run --rm -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust postgres",
     "stop:db": "docker stop postgres"
   },
