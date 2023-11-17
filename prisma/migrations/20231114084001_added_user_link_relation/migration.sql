@@ -4,6 +4,7 @@ CREATE TYPE "Platform" AS ENUM ('GITHUB', 'FRONTENDMENTOR', 'TWITTER', 'LINKEDIN
 -- CreateTable
 CREATE TABLE "Link" (
     "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "platform" "Platform" NOT NULL,
     "href" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
