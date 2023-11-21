@@ -11,36 +11,42 @@ const ProfileInfo = () => {
 
   return (
     <FormProvider {...methods}>
-      <form className="grid grid-cols-1 bg-custom-gray-light rounded-md p-6 mb-6 sm:grid-cols-3">
-        <div className="flex items-center col-span-1">
-          <Typography>First name</Typography>
-        </div>
-        <div className="col-span-2 mb-4 sm:mb-6">
-          <Input 
-            validationName="firstName"
-            noGutter
-          />
-        </div>
-
-        <div className="flex items-center col-span-1">
-          <Typography>Last name</Typography>
-        </div>
-        <div className="col-span-2 mb-4 sm:mb-6">
-          <Input 
-            validationName="lastName"
-            noGutter
-          />
+      <form className="bg-custom-gray-light rounded-md p-6 mb-6 sm:grid-cols-3">
+        <div className="grid grid-cols-3 mb-4">
+          <div className="flex items-center col-span-1">
+            <Typography>First name</Typography>
+          </div>
+          <div className="col-span-2">
+            <Input 
+              validationName="firstName"
+              noGutter
+            />
+          </div>
         </div>
 
-        <div className="flex items-center col-span-1">
-          <Typography>Email</Typography>
+        <div className="grid grid-cols-3 mb-4">
+          <div className="flex items-center col-span-1">
+            <Typography>Last name</Typography>
+          </div>
+          <div className="col-span-2">
+            <Input 
+              validationName="lastName"
+              noGutter
+            />
+          </div>
         </div>
-        <div className="col-span-2">
-          <Input 
-            validationName="email"
-            noGutter
-            inputProps={{ type: "email" }}
-          />
+
+        <div className="grid grid-cols-3 mb-4">
+          <div className="flex items-center col-span-1">
+            <Typography>Email</Typography>
+          </div>
+          <div className="col-span-2">
+            <Input 
+              validationName="email"
+              noGutter
+              inputProps={{ type: "email" }}
+            />
+          </div>
         </div>
       </form>
     </FormProvider>
