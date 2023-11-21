@@ -6,26 +6,29 @@ import Typography from "./Typography";
 import { useFormContext } from "react-hook-form";
 
 interface InputProps {
-  label: string;
+  label?: string;
   validationName: string;
   inputProps?: DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
   error?: string;
   icon?: ReactNode;
+  noGutter?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon, validationName }) => {
+const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon, validationName, noGutter = false }) => {
   const { register } = useFormContext();
 
   return (
     <div>
-      <label 
-        htmlFor={label.toLowerCase()} 
-        className="block mb-1 text-custom-gray"
-      >
-        {label}
-      </label>
+      {label && (
+        <label 
+          htmlFor={label.toLowerCase()} 
+          className="block mb-1 text-custom-gray"
+        >
+          {label} {inputProps.required ? "*" : ""}
+        </label>
+      )}
 
-      <div className="relative mb-6">
+      <div className={clsx("relative", noGutter ? "mb-0" : "mb-6")}>
         {icon && (
           <div className="absolute top-3.5 left-0 flex items-center pl-3.5 pointer-events-none">
             {icon}
@@ -34,7 +37,7 @@ const Input: React.FC<InputProps> = ({ label, inputProps = {}, error = "", icon,
 
         <input 
           {...register(validationName)}
-          id={label.toLowerCase()} 
+          id={label && label.toLowerCase()} 
           className={
             clsx(
               "border border-custom-gray-lighter rounded-md focus:border-custom-purple focus-visible:outline-none focus:text-custom-black block w-full p-2.5 mb-1", 
