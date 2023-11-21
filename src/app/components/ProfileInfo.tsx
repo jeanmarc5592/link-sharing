@@ -27,7 +27,7 @@ const ProfileInfo = () => {
         </div>
         <div className="col-span-2 mb-4 sm:mb-6">
           <Input 
-            validationName="firstName"
+            validationName="lastName"
             noGutter
           />
         </div>
@@ -37,7 +37,7 @@ const ProfileInfo = () => {
         </div>
         <div className="col-span-2">
           <Input 
-            validationName="firstName"
+            validationName="email"
             noGutter
             inputProps={{ type: "email" }}
           />
