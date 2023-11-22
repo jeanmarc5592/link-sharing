@@ -1,10 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Typography from '../common/components/Typography'
 import ProfilePicture from './ProfilePicture'
 import ProfileInfo from './ProfileInfo'
 import Button from '../common/components/Button'
+import { useQuery } from '@tanstack/react-query'
+import { getMe } from '../services/users'
+import { useAppDispatch } from '../common/hooks/useAppDispatch'
+import { setProfile } from '@/lib/store/slices/profileSlice'
 
 const Profile = () => {
+  const getMeQuery = useQuery({
+    queryKey: ['users'],
+    queryFn: getMe
+  });
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!getMeQuery.data) {
+      return;
+    }
+
+    dispatch(setProfile(getMeQuery.data));
+  }, [getMeQuery.data, dispatch]);
+
   const handleSave = () => {
     // TODO: Implement save logic
   }
