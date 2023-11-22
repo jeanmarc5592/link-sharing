@@ -1,7 +1,10 @@
 import Typography from "../common/components/Typography"
 import ImageIcon from "../common/components/icons/ImageIcon"
+import { useAppSelector } from "../common/hooks/useAppSelector"
 
 const ProfilePicture = () => {
+  const imageUrl = useAppSelector((state) => state.profile.picture);
+
   const handleUpload = async () => {
     // TODO: Implement upload logic
   }
@@ -17,8 +20,16 @@ const ProfilePicture = () => {
           onClick={handleUpload}
           className="flex flex-col justify-center items-center ml-0 mr-0 mb-4 w-[193px] h-[193px] cursor-pointer bg-custom-purple-light rounded-md sm:mb-0 sm:mr-6"
         >
-          <ImageIcon />
-          <Typography className="text-custom-purple font-semibold mt-2">+ Upload Image</Typography>
+          {imageUrl === null ? (
+            <>
+              <ImageIcon />
+              <Typography className="text-custom-purple font-semibold mt-2">+ Upload Image</Typography>
+            </>
+          ) : (
+            <>
+              {/* TODO: Render profile picture */}
+            </>
+          )}
         </div>
 
         <div className="flex flex-col justify-center">
