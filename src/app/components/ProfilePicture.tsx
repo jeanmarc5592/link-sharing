@@ -1,6 +1,6 @@
 "use client"
 
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import Typography from "../common/components/Typography"
 import ImageIcon from "../common/components/icons/ImageIcon"
 import { useAppSelector } from "../common/hooks/useAppSelector"
