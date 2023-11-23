@@ -1,3 +1,4 @@
+import { UserUpdates } from "@/app/services/types";
 import prisma from "@/lib/db/prisma";
 import { User } from "@prisma/client";
 
@@ -50,6 +51,21 @@ export class UsersService {
       console.error(error);
       return null;
     }
+  }
+
+  async update(userId: string, updates: UserUpdates): Promise<Partial<User> | null> {
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id: userId},
+        data: {
+          ...updates
+        }
+      });
+      return this.stripSensitiveData(updatedUser);
+    } catch (error) {
+      console.error(error);
+      return null;
+    } 
   }
 
   private stripSensitiveData(user: User): Partial<User> {
