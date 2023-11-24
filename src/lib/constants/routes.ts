@@ -1,3 +1,5 @@
+// TODO: Add remaining routes
+
 export const ROUTES = {
   auth: {
     signup: {
