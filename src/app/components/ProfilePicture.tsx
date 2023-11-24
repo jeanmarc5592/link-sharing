@@ -10,6 +10,7 @@ import { updateMe } from "../services/users"
 import { useAppDispatch } from "../common/hooks/useAppDispatch"
 import { setProfile } from "@/lib/store/slices/profileSlice"
 import Image from "next/image"
+import { toast } from "react-toastify"
 
 const ProfilePicture = () => {
   const updateDateMe = useMutation({
@@ -35,10 +36,9 @@ const ProfilePicture = () => {
     try {
       const response = await updateDateMe.mutateAsync({ picture: result.info.url as string });
       dispatch(setProfile(response));
-      // TODO: Throw success notification
     } catch (error) {
       console.error(error);
-      // TODO: Throw error notification
+      toast.error("Something went wrong getting your image. Please try again.")
     }
   };
 
