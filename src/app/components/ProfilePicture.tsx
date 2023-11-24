@@ -11,6 +11,7 @@ import { useAppDispatch } from "../common/hooks/useAppDispatch"
 import { setProfile } from "@/lib/store/slices/profileSlice"
 import Image from "next/image"
 import { toast } from "react-toastify"
+import { ROUTES } from "@/lib/constants/routes"
 
 const ProfilePicture = () => {
   const updateDateMe = useMutation({
@@ -50,7 +51,7 @@ const ProfilePicture = () => {
 
       <div className="col-span-2 flex flex-col sm:flex-row">
         <CldUploadWidget 
-          signatureEndpoint="/api/cloudinary/signature"
+          signatureEndpoint={ROUTES.cloudinary.signature.href}
           onSuccess={onUploadSuccess}
         >
           {({ open }) => {
