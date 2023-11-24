@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const profileSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email().min(1),
-  picture: z.string(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  email: z.string().email().optional(),
+  picture: z.string().optional(),
 });
 
 export type ProfileSchemaType = z.infer<typeof profileSchema>;
