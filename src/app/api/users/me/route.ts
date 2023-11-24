@@ -1,7 +1,9 @@
 import { UserUpdates } from '@/app/services/types';
+import { profileSchema } from '@/lib/validators/profile';
 import { AuthService } from '@/server/services/auth';
 import { HttpService } from '@/server/services/http';
 import { UsersService } from '@/server/services/users';
+import { ValidationService } from '@/server/services/validation';
 import { NextRequestWithAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
 
@@ -36,6 +38,7 @@ export const PATCH = async (req: NextRequestWithAuth) => {
   const httpService = new HttpService();
   const authService = new AuthService();
   const usersService = new UsersService();
+  const validationService = new ValidationService();
 
   const isRequestValid = await authService.validateRequest(req);
 
@@ -45,7 +48,11 @@ export const PATCH = async (req: NextRequestWithAuth) => {
 
   const body: UserUpdates = await req.json();
 
-  // TODO: Validate "body"
+  const isBodyValid = validationService.validateSchema(profileSchema, body);
+
+  if (isBodyValid !== "OK") {
+    return NextResponse.json({ ...isBodyValid.errors }, { status: 400 });
+  }
 
   const token = await httpService.extractToken(req);
   const userId = await httpService.getUserIdFromToken(token);
