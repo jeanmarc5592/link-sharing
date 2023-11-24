@@ -9,6 +9,7 @@ import { UserUpdates } from "../services/types"
 import { updateMe } from "../services/users"
 import { useAppDispatch } from "../common/hooks/useAppDispatch"
 import { setProfile } from "@/lib/store/slices/profileSlice"
+import Image from "next/image"
 
 const ProfilePicture = () => {
   const updateDateMe = useMutation({
@@ -34,6 +35,7 @@ const ProfilePicture = () => {
     try {
       const response = await updateDateMe.mutateAsync({ picture: result.info.url as string });
       dispatch(setProfile(response));
+      // TODO: Throw success notification
     } catch (error) {
       console.error(error);
       // TODO: Throw error notification
@@ -64,9 +66,20 @@ const ProfilePicture = () => {
                       <Typography className="text-custom-purple font-semibold mt-2">+ Upload Image</Typography>
                     </>
                   ) : (
-                    <>
-                      {/* TODO: Render profile picture */}
-                    </>
+                    <div className="relative group">
+                      <Image 
+                        loading="lazy" 
+                        src={imageUrl} 
+                        width={193} 
+                        height={193} 
+                        alt="Profile Image" 
+                        className="rounded-md group-hover:opacity-100 transition-opacity" 
+                      />
+                      <div className="opacity-0 group-hover:opacity-100 bg-custom-black-rgba flex flex-col justify-center items-center rounded-md transition-all absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full h-full">
+                        <ImageIcon isSelected />
+                        <Typography className="text-white font-semibold mt-2">Change Image</Typography>
+                      </div>
+                    </div>
                   )}
                 </div>
               </>

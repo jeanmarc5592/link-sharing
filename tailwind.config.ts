@@ -20,6 +20,7 @@ const config: Config = {
         "custom-gray-lighter": "#D9D9D9",
         "custom-gray-light": "#FAFAFA",
         "custom-red": "#FF3939",
+        "custom-black-rgba": "rgba(0, 0, 0, 0.4)",
       }
     },
   },
