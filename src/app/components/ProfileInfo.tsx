@@ -31,7 +31,7 @@ const ProfileInfo = () => {
   return (
     <FormProvider {...methods}>
       <form className="bg-custom-gray-light rounded-md p-6 mb-6 sm:grid-cols-3">
-        <div className="grid grid-cols-3 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 mb-4">
           <div className="flex items-center col-span-1">
             <Typography>First name</Typography>
           </div>
@@ -47,7 +47,7 @@ const ProfileInfo = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 mb-4">
           <div className="flex items-center col-span-1">
             <Typography>Last name</Typography>
           </div>
@@ -63,7 +63,7 @@ const ProfileInfo = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 mb-4">
           <div className="flex items-center col-span-1">
             <Typography>Email</Typography>
           </div>
