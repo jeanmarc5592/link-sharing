@@ -53,7 +53,7 @@ export class UsersService {
     }
   }
 
-  async update(userId: string, updates: UserUpdates): Promise<Partial<User> | null> {
+  async update(userId: string, updates: Partial<User>): Promise<Partial<User> | null> {
     try {
       const updatedUser = await prisma.user.update({
         where: { id: userId},

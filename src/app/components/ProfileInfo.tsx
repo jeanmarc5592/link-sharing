@@ -3,11 +3,30 @@ import Input from "../common/components/Input"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileSchemaType, profileSchema } from "@/lib/validators/profile";
 import Typography from "../common/components/Typography";
+import { useAppSelector } from "../common/hooks/useAppSelector";
+import { ChangeEvent } from "react";
+import { useAppDispatch } from "../common/hooks/useAppDispatch";
+import { updateProfileInfo } from "@/lib/store/slices/profileSlice";
 
 const ProfileInfo = () => {
+  const profile = useAppSelector((state) => state.profile);
+  const dispatch = useAppDispatch();
+
   const methods = useForm<ProfileSchemaType>({
     resolver: zodResolver(profileSchema),
   });
+
+  const updateFirstName = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateProfileInfo({ ...profile, firstName: e.target.value }));
+  };
+
+  const updateLastName = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateProfileInfo({ ...profile, lastName: e.target.value }));
+  };
+
+  const updateEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateProfileInfo({ ...profile, email: e.target.value }));
+  };
 
   return (
     <FormProvider {...methods}>
@@ -20,6 +39,10 @@ const ProfileInfo = () => {
             <Input 
               validationName="firstName"
               noGutter
+              inputProps={{ 
+                value: profile.firstName || "",
+                onChange: updateFirstName,
+              }}
             />
           </div>
         </div>
@@ -32,6 +55,10 @@ const ProfileInfo = () => {
             <Input 
               validationName="lastName"
               noGutter
+              inputProps={{
+                value: profile.lastName || "",
+                onChange: updateLastName,
+              }}
             />
           </div>
         </div>
@@ -44,7 +71,11 @@ const ProfileInfo = () => {
             <Input 
               validationName="email"
               noGutter
-              inputProps={{ type: "email" }}
+              inputProps={{ 
+                type: "email", 
+                value: profile.email || "",
+                onChange: updateEmail,
+              }}
             />
           </div>
         </div>

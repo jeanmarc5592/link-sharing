@@ -7,6 +7,6 @@ export const getMe = async () => {
   return httpClient.get<User>(ROUTES.users.me.href).then(res => res.data);
 }
 
-export const updateMe = async (updates: UserUpdates) => {
+export const updateMe = async (updates: Partial<User>) => {
   return httpClient.patch<User>(ROUTES.users.me.href, updates).then(res => res.data);
 }

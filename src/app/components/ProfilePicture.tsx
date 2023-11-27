@@ -8,20 +8,21 @@ import { CldUploadWidget, CldUploadWidgetResults } from "next-cloudinary"
 import { UserUpdates } from "../services/types"
 import { updateMe } from "../services/users"
 import { useAppDispatch } from "../common/hooks/useAppDispatch"
-import { setProfile } from "@/lib/store/slices/profileSlice"
+import { setProfile, updateProfileInfo, updateProfilePicture } from "@/lib/store/slices/profileSlice"
 import Image from "next/image"
 import { toast } from "react-toastify"
 import { ROUTES } from "@/lib/constants/routes"
+import { User } from "@prisma/client"
 
 const ProfilePicture = () => {
-  const updateDateMe = useMutation({
+  const updateMeMutation = useMutation({
     mutationKey: ["users"],
-    mutationFn: (updates: UserUpdates) => {
+    mutationFn: (updates: Partial<User>) => {
       return updateMe(updates);
     }
   });
 
-  const imageUrl = useAppSelector((state) => state.profile.picture);
+  const profile = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
 
   const onUploadSuccess = async (result: CldUploadWidgetResults) => {
@@ -35,11 +36,16 @@ const ProfilePicture = () => {
     }
 
     try {
-      const response = await updateDateMe.mutateAsync({ picture: result.info.url as string });
-      dispatch(setProfile(response));
+      const { picture } = await updateMeMutation.mutateAsync({ picture: result.info.url as string });
+
+      if (!picture) {
+        throw new Error("Picture is null");
+      }
+
+      dispatch(updateProfilePicture(picture));
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong getting your image. Please try again.")
+      toast.error("Something went wrong updating your image. Please try again.")
     }
   };
 
@@ -61,7 +67,7 @@ const ProfilePicture = () => {
                   onClick={() => open()}
                   className="flex flex-col justify-center items-center ml-0 mr-0 mb-4 w-[193px] h-[193px] cursor-pointer bg-custom-purple-light rounded-md sm:mb-0 sm:mr-6"
                 >
-                  {imageUrl === null ? (
+                  {profile.picture === null ? (
                     <>
                       <ImageIcon />
                       <Typography className="text-custom-purple font-semibold mt-2">+ Upload Image</Typography>
@@ -70,7 +76,7 @@ const ProfilePicture = () => {
                     <div className="relative group">
                       <Image 
                         loading="lazy" 
-                        src={imageUrl} 
+                        src={profile.picture} 
                         width={193} 
                         height={193} 
                         alt="Profile Image" 

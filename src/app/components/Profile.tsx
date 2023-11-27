@@ -3,10 +3,13 @@ import Typography from '../common/components/Typography'
 import ProfilePicture from './ProfilePicture'
 import ProfileInfo from './ProfileInfo'
 import Button from '../common/components/Button'
-import { useQuery } from '@tanstack/react-query'
-import { getMe } from '../services/users'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { getMe, updateMe } from '../services/users'
 import { useAppDispatch } from '../common/hooks/useAppDispatch'
 import { setProfile } from '@/lib/store/slices/profileSlice'
+import { UserUpdates } from '../services/types'
+import { useAppSelector } from '../common/hooks/useAppSelector'
+import { toast } from 'react-toastify'
 
 const Profile = () => {
   const getMeQuery = useQuery({
@@ -14,6 +17,14 @@ const Profile = () => {
     queryFn: getMe
   });
 
+  const updateMeMutation = useMutation({
+    mutationKey: ["users"],
+    mutationFn: (updates: UserUpdates) => {
+      return updateMe(updates);
+    }
+  });
+
+  const profile = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -24,8 +35,22 @@ const Profile = () => {
     dispatch(setProfile(getMeQuery.data));
   }, [getMeQuery.data, dispatch]);
 
-  const handleSave = () => {
-    // TODO: Implement save logic
+  const handleSave = async () => {
+    try {
+      if (!profile.isModified) {
+        return;
+      }
+
+      const { isModified, ...modifiedProfile } = profile;
+
+      await updateMeMutation.mutateAsync(modifiedProfile);
+      getMeQuery.refetch();
+
+      toast.success('Your profile has been saved successfully!');
+    } catch (error) {
+      console.error(error);
+      toast.error('Something went wrong editing your profile. Please try again.');
+    }
   }
 
   return (
