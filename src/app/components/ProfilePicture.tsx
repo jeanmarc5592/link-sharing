@@ -65,7 +65,7 @@ const ProfilePicture = () => {
               <>
                 <div 
                   onClick={() => open()}
-                  className="flex flex-col justify-center items-center ml-0 mr-0 mb-4 w-[193px] h-[193px] cursor-pointer bg-custom-purple-light rounded-md sm:mb-0 sm:mr-6"
+                  className="flex flex-col justify-center items-center ml-0 mr-0 mb-4 w-[193px] h-[193px] max-h-[193px] overflow-hidden cursor-pointer bg-custom-purple-light rounded-md sm:mb-0 sm:mr-6"
                 >
                   {profile.picture === null ? (
                     <>
@@ -80,7 +80,7 @@ const ProfilePicture = () => {
                         width={193} 
                         height={193} 
                         alt="Profile Image" 
-                        className="rounded-md group-hover:opacity-100 transition-opacity" 
+                        className="rounded-md group-hover:opacity-100 transition-opacity max-h-[100%]" 
                       />
                       <div className="opacity-0 group-hover:opacity-100 bg-custom-black-rgba flex flex-col justify-center items-center rounded-md transition-all absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] w-full h-full">
                         <ImageIcon isSelected />
