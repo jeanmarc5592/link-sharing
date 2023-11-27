@@ -10,6 +10,8 @@ import { setProfile } from '@/lib/store/slices/profileSlice'
 import { UserUpdates } from '../services/types'
 import { useAppSelector } from '../common/hooks/useAppSelector'
 import { toast } from 'react-toastify'
+import ProfilePictureSkeleton from './ProfilePictureSkeleton'
+import ProfileInfoSkeleton from './ProfileInfoSkeleton'
 
 const Profile = () => {
   const getMeQuery = useQuery({
@@ -58,15 +60,24 @@ const Profile = () => {
       <Typography variant="Heading M" className="mb-4">Profile Details</Typography>
       <Typography className="mb-12">Add your details to create a personal touch to your profile.</Typography>
 
-      <ProfilePicture />
-      <ProfileInfo />
+      {getMeQuery.isLoading ? (
+        <>
+          <ProfilePictureSkeleton />
+          <ProfileInfoSkeleton />
+        </>
+      ) : (
+        <>
+          <ProfilePicture />
+          <ProfileInfo />
+        </>
+      )}
 
       <div className="border-t pt-4 pr-6 -mx-6 mt-auto flex justify-end">
         <div className="w-fit">
           <Button 
             disabled={!profile.isModified} 
             onClick={handleSave}
-            isLoading={false}
+            isLoading={updateMeMutation.isLoading}
           >
             Save
           </Button>

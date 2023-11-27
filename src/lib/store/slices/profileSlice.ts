@@ -27,6 +27,7 @@ export const profileSlice = createSlice({
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
       state.picture = action.payload.picture;
+      state.isModified = false;
     },
     updateProfileInfo: (state, action: PayloadAction<{ firstName: string | null; lastName: string | null; email: string; }>) => {
       state.firstName = action.payload.firstName;
