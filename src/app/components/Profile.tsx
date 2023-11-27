@@ -64,7 +64,7 @@ const Profile = () => {
       <div className="border-t pt-4 pr-6 -mx-6 mt-auto flex justify-end">
         <div className="w-fit">
           <Button 
-            disabled={false} 
+            disabled={!profile.isModified} 
             onClick={handleSave}
             isLoading={false}
           >
