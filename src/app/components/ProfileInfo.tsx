@@ -8,7 +8,11 @@ import { ChangeEvent } from "react";
 import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { updateProfileInfo } from "@/lib/store/slices/profileSlice";
 
-const ProfileInfo = () => {
+interface ProfileInfoProps {
+  emailError: string;
+}
+
+const ProfileInfo: React.FC<ProfileInfoProps> = ({ emailError }) => {
   const profile = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
 
@@ -65,7 +69,7 @@ const ProfileInfo = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 mb-4">
           <div className="flex items-center col-span-1">
-            <Typography>Email</Typography>
+            <Typography>Email*</Typography>
           </div>
           <div className="col-span-2">
             <Input 
@@ -76,6 +80,7 @@ const ProfileInfo = () => {
                 value: profile.email || "",
                 onChange: updateEmail,
               }}
+              error={emailError}
             />
           </div>
         </div>

@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react'
+"use client";
+
+import React, { useEffect, useState } from 'react'
 import Typography from '../common/components/Typography'
 import ProfilePicture from './ProfilePicture'
 import ProfileInfo from './ProfileInfo'
@@ -12,8 +14,11 @@ import { useAppSelector } from '../common/hooks/useAppSelector'
 import { toast } from 'react-toastify'
 import ProfilePictureSkeleton from './ProfilePictureSkeleton'
 import ProfileInfoSkeleton from './ProfileInfoSkeleton'
+import { StringUtils } from '@/lib/utils/string';
 
 const Profile = () => {
+  const [emailError, setEmailError] = useState("");
+
   const getMeQuery = useQuery({
     queryKey: ['users'],
     queryFn: getMe
@@ -37,9 +42,37 @@ const Profile = () => {
     dispatch(setProfile(getMeQuery.data));
   }, [getMeQuery.data, dispatch]);
 
+  const checkEmail = (email: string) => {
+    if (!email || email.length === 0) {
+      setEmailError("Email can't be empty");
+      return null;
+    }
+
+    if (!StringUtils.isEmail(email)) {
+      setEmailError("Must be a valid email");
+      return null;
+    }
+    
+    return;
+  };
+
   const handleSave = async () => {
     try {
       if (!profile.isModified) {
+        return;
+      }
+
+      if (emailError) {
+        setEmailError("");
+      }
+
+      if (!profile.email || profile.email.length === 0) {
+        setEmailError("Email can't be empty");
+        return;
+      }
+  
+      if (!StringUtils.isEmail(profile.email)) {
+        setEmailError("Must be a valid email");
         return;
       }
 
@@ -68,7 +101,7 @@ const Profile = () => {
       ) : (
         <>
           <ProfilePicture />
-          <ProfileInfo />
+          <ProfileInfo emailError={emailError} />
         </>
       )}
 
