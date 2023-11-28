@@ -28,5 +28,9 @@ export const ROUTES = {
       name: "cloudinarySignature",
       href: "api/cloudinary/signature"
     }
+  },
+  preview: {
+    name: "preview",
+    href: "/preview"
   }
 };
