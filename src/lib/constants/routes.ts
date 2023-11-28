@@ -32,5 +32,9 @@ export const ROUTES = {
   preview: {
     name: "preview",
     href: "/preview"
+  },
+  share: {
+    name: "share",
+    href: "/share"
   }
 };

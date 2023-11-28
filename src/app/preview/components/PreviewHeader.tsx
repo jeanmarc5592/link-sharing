@@ -2,19 +2,45 @@
 
 import Button from "@/app/common/components/Button"
 import { ROUTES } from "@/lib/constants/routes";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify";
 
 const PreviewHeader = () => {
+  const getAsyncSession = getSession();
   const router = useRouter();
 
   const navigateToEditor = () => {
     router.push(ROUTES.home.href);
   }
 
-  const createShareLink = () => {
-    // TODO: Implement logic to create a share link
-    // TODO: Copy to clipboard automatically
-    // TODO: Render success notification when copied successfully
+  const createShareLink = async () => {
+    const session = await getAsyncSession;
+
+    if (!session) {
+      console.error("No session");
+      return;
+    }
+
+    if (!session.user || !("user" in session)) {
+      console.error("No user in session");
+      return;
+    }
+
+    if (!("id" in session.user)) {
+      console.error("No user id");
+      return;
+    }
+
+    const shareLink = `${window.location.host}${ROUTES.share.href}?user=${session.user.id}`;
+
+    if (!navigator.clipboard) {
+      throw new Error("Browser don't have support for native clipboard.");
+    }
+
+    navigator.clipboard.writeText(shareLink);
+
+    toast.success("The link has been copied to your clipboard!");
   }
 
   return (
