@@ -1,12 +1,11 @@
 "use client"
 
+import LinkButton from "@/app/common/components/LinkButton";
 import Typography from "@/app/common/components/Typography";
 import { getLinks } from "@/app/services/links";
 import { getMe } from "@/app/services/users";
-import { setProfile } from "@/lib/store/slices/profileSlice";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useEffect } from "react";
 
 const ProfileCard = () => {
   const { data: profile } = useQuery({
@@ -38,14 +37,9 @@ const ProfileCard = () => {
         <Typography variant="Heading M" className="mb-2 text-center">{profile.firstName} {profile.lastName}</Typography>
         <Typography className="mb-10 text-center">{profile.email}</Typography>
 
-        <div>
-          {/* TODO: Map colors of links by platform */}
-          {links.map((link) => {
-            return (
-              <div key={link.id}>{link.platform}</div>
-            );
-          })}
-        </div>
+        {links.map((link) => {
+          return <LinkButton key={link.id} link={link} />
+        })}
       </div>
     </div>
   )
