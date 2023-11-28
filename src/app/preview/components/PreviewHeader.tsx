@@ -18,7 +18,7 @@ const PreviewHeader = () => {
   }
 
   return (
-    <div className="p-4 flex items-center justify-between sm:bg-white sm:rounded-md">
+    <div className="p-4 flex items-center justify-between sm:bg-white sm:rounded-md sm:mx-4">
       <div>
         <Button variant="secondary" onClick={navigateToEditor}>
           Back to Editor
