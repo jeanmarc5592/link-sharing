@@ -14,7 +14,7 @@ const PreviewPage = async () => {
   }
 
   return (
-    <Page>
+    <Page hasBackdrop>
       <PreviewHeader />
       <ProfileCard />
     </Page>
