@@ -5,12 +5,13 @@ import { authOptions } from "@/lib/auth/options";
 import Header from "./common/components/Header";
 import HomePageContent from "./components/HomePageContent";
 import Page from "./common/components/Page";
+import { ROUTES } from "@/lib/constants/routes";
 
 const HomePage = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/auth/login");
+    redirect(ROUTES.auth.login.href);
   }
   
   return (
