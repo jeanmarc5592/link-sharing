@@ -22,10 +22,6 @@ const ProfileCard = () => {
   const { data: profile } = getMeQuery;
   const { data: links } = getLinksQuery;
 
-  // if (!profile || !links) {
-  //   return <></>;
-  // }
-
   if (getMeQuery.isLoading && getLinksQuery.isLoading) {
     return <ProfileCardSkeleton />;
   }
