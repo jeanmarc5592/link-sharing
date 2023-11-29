@@ -8,12 +8,19 @@ import ProfileDetailsIcon from './icons/ProfileDetailsIcon'
 import { useAppSelector } from '../hooks/useAppSelector'
 import LogoIcon from './icons/LogoIcon'
 import PreviewIcon from './icons/PreviewIcon'
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/lib/constants/routes'
 
 const Header = () => {
   const activeTab = useAppSelector((state) => state.homeTabs.activeTab);
+  const router = useRouter();
+
+  const navigateToPreview = () =>{
+    router.push(ROUTES.preview.href);
+  }
 
   return (
-    <div className="bg-white rounded-md p-4 flex items-center justify-evenly m-4">
+    <div className="bg-white rounded-md p-4 mb-4 mx-4 flex items-center justify-evenly">
       <Logo className="hidden sm:flex" />
       <div className="sm:hidden">
         <LogoIcon />
@@ -35,7 +42,7 @@ const Header = () => {
       </div>
 
       <div>
-        <Button className="mb-0" variant="secondary">
+        <Button className="mb-0" variant="secondary" onClick={navigateToPreview}>
           <span className="hidden sm:block">Preview</span>
           <span className="sm:hidden"><PreviewIcon /></span>
         </Button>
