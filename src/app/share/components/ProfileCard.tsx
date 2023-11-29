@@ -6,20 +6,28 @@ import { getLinks } from "@/app/services/links";
 import { getMe } from "@/app/services/users";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import ProfileCardSkeleton from "./ProfileCardSkeleton";
 
 const ProfileCard = () => {
-  const { data: profile } = useQuery({
+  const getMeQuery = useQuery({
     queryKey: ['users'],
     queryFn: getMe
   });
 
-  const { data: links } = useQuery({
+  const getLinksQuery = useQuery({
     queryKey: ['links'],
     queryFn: getLinks,
   });
 
-  if (!profile || !links) {
-    return <></>;
+  const { data: profile } = getMeQuery;
+  const { data: links } = getLinksQuery;
+
+  // if (!profile || !links) {
+  //   return <></>;
+  // }
+
+  if (getMeQuery.isLoading && getLinksQuery.isLoading) {
+    return <ProfileCardSkeleton />;
   }
 
   return (
@@ -28,7 +36,7 @@ const ProfileCard = () => {
         <div className="w-[104px] h-[104px] max-h-[104px] overflow-hidden">
           <Image 
             loading="lazy" 
-            src={profile.picture || ""} 
+            src={profile?.picture || ""} 
             width={104} 
             height={104} 
             alt="Profile Image" 
@@ -36,10 +44,10 @@ const ProfileCard = () => {
           />
         </div>
 
-        <Typography variant="Heading M" className="mb-2 text-center">{profile.firstName} {profile.lastName}</Typography>
-        <Typography className="mb-10 text-center">{profile.email}</Typography>
+        <Typography variant="Heading M" className="mb-2 text-center">{profile?.firstName} {profile?.lastName}</Typography>
+        <Typography className="mb-10 text-center">{profile?.email}</Typography>
 
-        {links.map((link) => {
+        {links?.map((link) => {
           return <LinkButton key={link.id} link={link} />
         })}
       </div>
