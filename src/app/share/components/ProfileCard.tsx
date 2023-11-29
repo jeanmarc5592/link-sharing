@@ -7,6 +7,7 @@ import { getMe } from "@/app/services/users";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import ProfileCardSkeleton from "./ProfileCardSkeleton";
+import { UserIcon } from "@heroicons/react/20/solid";
 
 const ProfileCard = () => {
   const getMeQuery = useQuery({
@@ -29,16 +30,21 @@ const ProfileCard = () => {
   return (
     <div className="w-fit mx-auto mt-10 p-4 min-w-[350px] sm:p-10 sm:mt-0 sm:bg-white sm:rounded-lg sm:shadow-lg sm:absolute sm:left-1/2 sm:top-[18%] sm:-translate-x-1/2">
       <div className="flex flex-col items-center">
-        <div className="w-[104px] h-[104px] max-h-[104px] overflow-hidden mb-6">
-          {/* TODO: Add placeholder when there is no image added yet */}
-          <Image 
-            loading="lazy" 
-            src={profile?.picture || ""} 
-            width={104} 
-            height={104} 
-            alt="Profile Image" 
-            className="rounded-full border-[3px] border-custom-purple max-h-[100%] object-cover" 
-          />
+        <div className="w-[104px] h-[104px] max-h-[104px] rounded-full border-[3px] border-custom-purple overflow-hidden mb-6">
+          {profile?.picture ? (
+            <Image 
+              loading="lazy" 
+              src={profile.picture} 
+              width={104} 
+              height={104} 
+              alt="Profile Image" 
+              className="max-h-[100%] object-cover" 
+            />
+          ) : (
+            <div className="bg-custom-gray-lighter h-[100%] w-[100%] flex justify-center items-center">
+              <UserIcon color="white" className="w-[64px] h-[64px]" />
+            </div>
+          )}
         </div>
 
         <Typography variant="Heading M" className="mb-2 text-center">{profile?.firstName} {profile?.lastName}</Typography>
