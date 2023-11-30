@@ -1,8 +1,12 @@
+import Page from "../common/components/Page"
+import PreviewPageContent from "../preview/components/PreviewPageContent";
+import SharePageContent from "./components/SharePageContent";
+
 const SharePage = () => {
   return (
-    <div>
-      To Be Implemented
-    </div>
+    <Page hasBackdrop>
+      <SharePageContent />
+    </Page>
   )
 }
 

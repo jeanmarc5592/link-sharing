@@ -2,39 +2,27 @@
 
 import LinkButton from "@/app/common/components/LinkButton";
 import Typography from "@/app/common/components/Typography";
-import { getLinks } from "@/app/services/links";
-import { getMe } from "@/app/services/users";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import ProfileCardSkeleton from "./ProfileCardSkeleton";
 import { UserIcon } from "@heroicons/react/20/solid";
+import { Link } from "@prisma/client";
 
-const ProfileCard = () => {
-  const getMeQuery = useQuery({
-    queryKey: ['users'],
-    queryFn: getMe
-  });
+interface ProfileCardProps {
+  picture?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  links?: Link[];
+}
 
-  const getLinksQuery = useQuery({
-    queryKey: ['links'],
-    queryFn: getLinks,
-  });
-
-  const { data: profile } = getMeQuery;
-  const { data: links } = getLinksQuery;
-
-  if (getMeQuery.isLoading && getLinksQuery.isLoading) {
-    return <ProfileCardSkeleton />;
-  }
-
+const ProfileCard: React.FC<ProfileCardProps> = ({ picture, firstName, lastName, email, links }) => {
   return (
     <div className="w-fit mx-auto mt-10 p-4 min-w-[350px] sm:p-10 sm:mt-0 sm:bg-white sm:rounded-lg sm:shadow-lg sm:absolute sm:left-1/2 sm:top-[18%] sm:-translate-x-1/2">
       <div className="flex flex-col items-center">
         <div className="w-[104px] h-[104px] max-h-[104px] rounded-full border-[3px] border-custom-purple overflow-hidden mb-6">
-          {profile?.picture ? (
+          {picture ? (
             <Image 
               loading="lazy" 
-              src={profile.picture} 
+              src={picture} 
               width={104} 
               height={104} 
               alt="Profile Image" 
@@ -47,8 +35,8 @@ const ProfileCard = () => {
           )}
         </div>
 
-        <Typography variant="Heading M" className="mb-2 text-center">{profile?.firstName} {profile?.lastName}</Typography>
-        <Typography className="mb-10 text-center">{profile?.email}</Typography>
+        <Typography variant="Heading M" className="mb-2 text-center">{firstName} {lastName}</Typography>
+        <Typography className="mb-10 text-center">{email}</Typography>
 
         {links?.map((link) => {
           return <LinkButton key={link.id} link={link} />

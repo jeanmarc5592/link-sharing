@@ -18,10 +18,13 @@ export const ROUTES = {
     href: "api/links",
   },
   users: {
+    name: "users",
+    href: "api/users",
     me: {
       name: "usersMe",
       href: "api/users/me",
     },
+    
   },
   cloudinary: {
     signature: {
