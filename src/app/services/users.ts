@@ -1,6 +1,5 @@
 import { httpClient } from "@/lib/utils/httpClient"
 import { User } from "@prisma/client";
-import { UserUpdates } from "./types";
 import { ROUTES } from "@/lib/constants/routes";
 
 export const getMe = async () => {
