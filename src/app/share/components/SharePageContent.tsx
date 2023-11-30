@@ -1,6 +1,6 @@
 "use client"
 
-import { getUser } from "@/app/services/users";
+import { getLinksForUser, getUser } from "@/app/services/users";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation"
 import { toast } from "react-toastify";
@@ -17,17 +17,23 @@ const SharePageContent = () => {
     queryFn: () => getUser(userId),
   });
 
-  const profile = getUserQuery.data;
+  const getLinksQuery = useQuery({
+    queryKey: ["links", userId],
+    queryFn: () => getLinksForUser(userId),
+  });
 
   useEffect(() => {
-    if (getUserQuery.error) {
-      toast.error("Something went wrong fetching the data. Check your URL and try again.");
+    if (getUserQuery.error || getLinksQuery.error) {
+      toast.error("Something went wrong fetching your data. Check your URL and try again.");
     }
-  }, [getUserQuery.error]);
+  }, [getUserQuery.error, getLinksQuery.error]);
+
+  const profile = getUserQuery.data;
+  const links = getLinksQuery.data;
 
   return (
     <>
-      {getUserQuery.isLoading  ? (
+      {getUserQuery.isLoading && getLinksQuery.isLoading ? (
         <ProfileCardSkeleton />
       ) : (
         <ProfileCard 
@@ -35,7 +41,7 @@ const SharePageContent = () => {
           lastName={profile?.lastName || undefined} 
           picture={profile?.picture || undefined}
           email={profile?.email || undefined}
-          links={[]}
+          links={links}
         />
       )}
     </>

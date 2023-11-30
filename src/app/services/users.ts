@@ -1,5 +1,5 @@
 import { httpClient } from "@/lib/utils/httpClient"
-import { User } from "@prisma/client";
+import { Link, User } from "@prisma/client";
 import { ROUTES } from "@/lib/constants/routes";
 
 export const getMe = async () => {
@@ -12,4 +12,8 @@ export const updateMe = async (updates: Partial<User>) => {
 
 export const getUser = async (id: string | null) => {
   return httpClient.get<User>(`${ROUTES.users.href}/${id}`).then(res => res.data);
+}
+
+export const getLinksForUser = async (id: string | null) => {
+  return httpClient.get<Link[]>(`${ROUTES.users.href}/${id}/links`).then(res => res.data);
 }
