@@ -2,7 +2,7 @@
 
 import { useAppSelector } from "../common/hooks/useAppSelector"
 import Links from "./Links";
-import Preview from "./Preview";
+import Preview from "./PhonePreview";
 import Profile from "./Profile";
 
 const HomePageContent = () => {
