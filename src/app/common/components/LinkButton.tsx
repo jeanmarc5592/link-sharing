@@ -88,17 +88,23 @@ const getLinkButtonIcon = (platform: Platform) => {
 
 interface LinkButtonProps {
   link: Link;
+  mode?: "default" | "preview"
 }
 
-const LinkButton: React.FC<LinkButtonProps> = ({ link }) => {
+const LinkButton: React.FC<LinkButtonProps> = ({ link, mode = "default" }) => {
   const { platform, href } = link;
 
+  const spacings = mode === "default" ? "p-5 mb-6" : "p-4 mb-4 cursor-default";
   const color = getLinkButtonColor(platform);
   const icon = getLinkButtonIcon(platform);
-  const styles = clsx("p-5 mb-6 rounded-md transition-all w-full flex justify-between items-center", color);
+  const styles = clsx("rounded-md transition-all w-full flex justify-between items-center", color, spacings);
   const label = StringUtils.capitalize(platform);
 
   const handleClick = () => {
+    if (mode === "preview") {
+      return;
+    }
+
     window.open(href, '_blank')?.focus();
   };
 

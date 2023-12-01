@@ -5,6 +5,7 @@ import Typography from "@/app/common/components/Typography";
 import Image from "next/image";
 import { UserIcon } from "@heroicons/react/20/solid";
 import { Link } from "@prisma/client";
+import ProfileCardImage from "./ProfileCardImage";
 
 interface ProfileCardProps {
   picture?: string;
@@ -18,22 +19,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ picture, firstName, lastName,
   return (
     <div className="w-fit mx-auto mt-10 p-4 min-w-[350px] sm:p-10 sm:mt-0 sm:bg-white sm:rounded-lg sm:shadow-lg sm:absolute sm:left-1/2 sm:top-[18%] sm:-translate-x-1/2">
       <div className="flex flex-col items-center">
-        <div className="w-[104px] h-[104px] max-h-[104px] rounded-full border-[3px] border-custom-purple overflow-hidden mb-6">
-          {picture ? (
-            <Image 
-              loading="lazy" 
-              src={picture} 
-              width={104} 
-              height={104} 
-              alt="Profile Image" 
-              className="max-h-[100%] object-cover" 
-            />
-          ) : (
-            <div className="bg-custom-gray-lighter h-[100%] w-[100%] flex justify-center items-center">
-              <UserIcon color="white" className="w-[64px] h-[64px]" />
-            </div>
-          )}
-        </div>
+        <ProfileCardImage picture={picture} />
 
         <Typography variant="Heading M" className="mb-2 text-center">{firstName} {lastName}</Typography>
         <Typography className="mb-10 text-center">{email}</Typography>
