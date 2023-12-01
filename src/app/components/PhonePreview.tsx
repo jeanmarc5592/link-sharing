@@ -12,7 +12,7 @@ const PhonePreview = () => {
       <PhoneMockup />
 
       <div className="w-[80%] absolute left-1/2 top-[50%] -translate-x-1/2">
-        {links?.map((link) => {
+        {links?.slice(0, 3).map((link) => {
           return <LinkButton key={link.id} link={link} />
         })}
       </div>
