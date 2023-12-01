@@ -1,6 +1,7 @@
 "use client" 
 
 import LinkButton from '../common/components/LinkButton';
+import Typography from '../common/components/Typography';
 import PhoneMockup from '../common/components/icons/PhoneMockup'
 import { useAppSelector } from '../common/hooks/useAppSelector'
 import ProfileCardImage from '../share/components/ProfileCardImage';
@@ -13,11 +14,12 @@ const PhonePreview = () => {
     <div className="relative">
       <PhoneMockup />
 
-      <div className="absolute left-1/2 top-[15%] -translate-x-1/2">
+      <div className="w-[80%] flex flex-col items-center text-center absolute left-1/2 top-[10%] -translate-x-1/2">
         <ProfileCardImage picture={profile.picture || undefined} />
-      </div>
 
-      <div className="w-[80%] absolute left-1/2 top-[50%] -translate-x-1/2">
+        <Typography variant="Heading M" className="-mt-2">{profile.firstName} {profile.lastName}</Typography>
+        <Typography className="mb-8">{profile.email}</Typography>
+
         {links?.slice(0, 3).map((link) => {
           return <LinkButton key={link.id} link={link} />
         })}
