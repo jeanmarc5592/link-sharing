@@ -20,8 +20,8 @@ const PhonePreview = () => {
         <Typography variant="Heading M" className="-mt-2">{profile.firstName} {profile.lastName}</Typography>
         <Typography className="mb-8">{profile.email}</Typography>
 
-        {links?.slice(0, 3).map((link) => {
-          return <LinkButton key={link.id} link={link} />
+        {links?.slice(0, 4).map((link) => {
+          return <LinkButton mode="preview" key={link.id} link={link} />
         })}
       </div>
     </div>
