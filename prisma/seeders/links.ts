@@ -9,6 +9,7 @@ export class LinksSeeder {
         href: "https://www.github.com",
         platform: "GITHUB",
         userId,
+        order: 1,
       }
     });
   }
