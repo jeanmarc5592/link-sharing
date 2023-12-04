@@ -16,6 +16,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteLink, getLinks } from "../services/links";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../common/components/LoadingSpinner";
+import DragAndDropIcon from "../common/components/icons/DragAndDropIcon";
 
 interface SingleLinkProps {
   linkData: Link;
@@ -66,7 +67,10 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
     <div className="w-full bg-custom-gray-light rounded-md p-6 mb-6">
       <FormProvider {...methods}>
         <div className="w-full flex justify-between mb-4">
-          <Typography className="font-semibold">Link #{index + 1}</Typography>
+          <span className="flex items-center">
+            <DragAndDropIcon />
+            <Typography className="font-semibold ml-2">Link #{index + 1}</Typography>
+          </span>
           <button 
             onClick={handleRemove} 
             className="text-custom-gray hover:text-custom-purple transition-all"
