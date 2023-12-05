@@ -15,7 +15,7 @@ export class LinksService {
       const links = await this.prisma.link.findMany({
         where: { userId }
       });
-      return ArrayUtils.sortByCreationDate(links, { order: "DESC" });
+      return this.sortByOrder(links);
     } catch (error) {
       console.error(error);
       return null;
@@ -23,12 +23,19 @@ export class LinksService {
   }
 
   async addNewLink(userId: string): Promise<Link | null> {
+    const userLinks = await this.getLinksByUser(userId);
+
+    if (!userLinks) {
+      return null;
+    }
+
     try {
       const createdLink = await this.prisma.link.create({
         data: {
           href: "https://www.github.com",
           platform: "GITHUB",
           userId,
+          order: userLinks.length + 1,
         }
       });
       return createdLink;
@@ -107,5 +114,16 @@ export class LinksService {
     }
 
     return "OK";
+  }
+
+  private sortByOrder(links: Link[]): Link[] {
+    return links.sort((a, b) => {
+      if (!("order" in a) || !("order" in b)) {
+        console.error("Key 'order' must be in every element");
+        return 0;
+      }
+
+      return b.order + a.order;
+    });
   }
 }
