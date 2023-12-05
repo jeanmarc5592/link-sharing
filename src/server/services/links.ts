@@ -66,6 +66,7 @@ export class LinksService {
         data: { 
           href: link.href,
           platform: link.platform,
+          order: link.order,
         },
       });
       return updatedLink;
@@ -105,6 +106,32 @@ export class LinksService {
     }
   }
 
+  async reorderLinks(links: Link[]): Promise<Link[] | null> {
+    if (links.length === 0) {
+      console.error("At least one link is required for reordering", links);
+      return null;
+    }
+
+    const reorderedLinks: Link[] = [];
+
+    try {
+      await Promise.all(links.map(async (link, index) => {
+        const reorderedLink = await this.updateOrderByIndex(index, link);
+
+        if (!reorderedLink) {
+          return null;
+        }
+
+        reorderedLinks.push(reorderedLink);
+      }));
+
+      return reorderedLinks;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   private checkLinksModification(links: ModifiedLink[]): null | "OK" {
     const linksAreModified = links.every((link) => link.isModified === true);
 
@@ -123,7 +150,17 @@ export class LinksService {
         return 0;
       }
 
-      return b.order + a.order;
+      return a.order - b.order;
     });
+  }
+
+  private async updateOrderByIndex(index: number, link: ModifiedLink): Promise<ModifiedLink | null> {
+    if (!link) {
+      return null;
+    }
+
+    Object.assign(link, { order: index + 1});
+
+    return await this.editLink(link);
   }
 }
