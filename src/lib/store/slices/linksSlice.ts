@@ -27,7 +27,7 @@ export const linksSlice = createSlice({
       }
     },
     reorderList: (state, action: PayloadAction<ModifiedLink[]>) => {
-      state.list = action.payload.map((link) => ({ ...link, isModified: true }));
+      state.list = action.payload.map((link, index) => ({ ...link, isModified: true, order: index + 1 }));
     }
   }
 });
