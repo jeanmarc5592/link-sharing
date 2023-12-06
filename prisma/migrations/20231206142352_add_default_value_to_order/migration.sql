@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Link" ALTER COLUMN "order" SET DEFAULT 1;
