@@ -31,6 +31,10 @@ model Link {
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 }
 
+model Test {
+  id        String   @id @default(uuid())
+}
+
 enum Platform {
   GITHUB
   FRONTENDMENTOR
