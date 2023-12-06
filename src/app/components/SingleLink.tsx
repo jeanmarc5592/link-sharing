@@ -42,7 +42,6 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
     resolver: zodResolver(linkSchema),
   });
 
-  const { formState: { errors }} = methods;
   const { href } = linkData;
 
   const handleRemove = async () => {
@@ -90,10 +89,8 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
           label="Link" 
           validationName="href" 
           icon={<LinkIcon />} 
-          // TODO: Show errors (currently not working)
-          error={errors.href?.message}
           inputProps={{ 
-            value: href, 
+            value: href || "", 
             onChange: updateHref,
             placeholder: "e.g. https://www.github.com/johnappleseed",
           }}
