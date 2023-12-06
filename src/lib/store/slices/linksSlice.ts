@@ -25,10 +25,13 @@ export const linksSlice = createSlice({
       if (state.list) {
         Object.assign(state.list[action.payload.index], { ...action.payload.link, isModified: true });
       }
+    },
+    reorderList: (state, action: PayloadAction<ModifiedLink[]>) => {
+      state.list = action.payload.map((link, index) => ({ ...link, isModified: true, order: index + 1 }));
     }
   }
 });
 
-export const { setList, updateLink } = linksSlice.actions;
+export const { setList, updateLink, reorderList } = linksSlice.actions;
 
 export default linksSlice.reducer;
