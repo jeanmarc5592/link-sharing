@@ -13,7 +13,7 @@ const LinksList = () => {
   const dispatch = useAppDispatch();
 
   const handleDragEnd = ({ destination, source }: DropResult) => {
-    if (!destination || !links) {
+    if (!destination || !links || destination.index == source.index) {
       return;
     }
 

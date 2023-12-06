@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Typography from '../common/components/Typography'
 import ProfilePicture from './ProfilePicture'
 import ProfileInfo from './ProfileInfo'
 import Button from '../common/components/Button'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getMe, updateMe } from '../services/users'
-import { useAppDispatch } from '../common/hooks/useAppDispatch'
-import { setProfile } from '@/lib/store/slices/profileSlice'
 import { UserUpdates } from '../services/types'
 import { useAppSelector } from '../common/hooks/useAppSelector'
 import { toast } from 'react-toastify'
@@ -32,29 +30,6 @@ const Profile = () => {
   });
 
   const profile = useAppSelector((state) => state.profile);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (!getMeQuery.data) {
-      return;
-    }
-
-    dispatch(setProfile(getMeQuery.data));
-  }, [getMeQuery.data, dispatch]);
-
-  const checkEmail = (email: string) => {
-    if (!email || email.length === 0) {
-      setEmailError("Email can't be empty");
-      return null;
-    }
-
-    if (!StringUtils.isEmail(email)) {
-      setEmailError("Must be a valid email");
-      return null;
-    }
-    
-    return;
-  };
 
   const handleSave = async () => {
     try {

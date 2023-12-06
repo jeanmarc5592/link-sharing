@@ -1,12 +1,46 @@
 "use client"
 
+import { useQuery } from "@tanstack/react-query";
+import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { useAppSelector } from "../common/hooks/useAppSelector"
+import { getLinks } from "../services/links";
 import Links from "./Links";
 import Preview from "./PhonePreview";
 import Profile from "./Profile";
+import { useEffect } from "react";
+import { setList } from "@/lib/store/slices/linksSlice";
+import { getMe } from "../services/users";
+import { setProfile } from "@/lib/store/slices/profileSlice";
 
 const HomePageContent = () => {
   const activeTab = useAppSelector((state) => state.homeTabs.activeTab);
+  const dispatch = useAppDispatch();
+
+  const getLinksQuery = useQuery({
+    queryKey: ['links'],
+    queryFn: getLinks,
+  });
+
+  const getMeQuery = useQuery({
+    queryKey: ['users'],
+    queryFn: getMe
+  });
+
+  useEffect(() => {
+    if (!getLinksQuery.data) {
+      return;
+    }
+
+    dispatch(setList(getLinksQuery.data));
+  }, [getLinksQuery.data, dispatch]);
+
+  useEffect(() => {
+    if (!getMeQuery.data) {
+      return;
+    }
+
+    dispatch(setProfile(getMeQuery.data));
+  }, [getMeQuery.data, dispatch]);
 
   return (
     <div className="flex w-full px-4">
