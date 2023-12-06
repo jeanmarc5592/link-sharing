@@ -101,7 +101,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ link, mode = "default" }) => {
   const label = StringUtils.capitalize(platform);
 
   const handleClick = () => {
-    if (mode === "preview") {
+    if (mode === "preview" || !href) {
       return;
     }
 
