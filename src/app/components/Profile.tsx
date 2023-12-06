@@ -31,20 +31,6 @@ const Profile = () => {
 
   const profile = useAppSelector((state) => state.profile);
 
-  const checkEmail = (email: string) => {
-    if (!email || email.length === 0) {
-      setEmailError("Email can't be empty");
-      return null;
-    }
-
-    if (!StringUtils.isEmail(email)) {
-      setEmailError("Must be a valid email");
-      return null;
-    }
-    
-    return;
-  };
-
   const handleSave = async () => {
     try {
       if (!profile.isModified) {

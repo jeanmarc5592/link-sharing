@@ -5,8 +5,7 @@ import Button from '../common/components/Button'
 import LinksList from './LinksList'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { addLink, editLinks, getLinks } from '../services/links'
-import { useAppDispatch } from '../common/hooks/useAppDispatch'
-import { ModifiedLink, setList } from '@/lib/store/slices/linksSlice'
+import { ModifiedLink } from '@/lib/store/slices/linksSlice'
 import { toast } from 'react-toastify'
 import { useAppSelector } from '../common/hooks/useAppSelector'
 import LinksListSkeleton from './LinksListSkeleton'
@@ -29,7 +28,6 @@ const Links = () => {
     }
   });
 
-  const dispatch = useAppDispatch();
   const links = useAppSelector((state) => state.links.list);
 
   const modifiedLinks = links?.filter((link) => link.isModified);
