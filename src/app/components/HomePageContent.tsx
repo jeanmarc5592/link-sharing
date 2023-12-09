@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { setList } from "@/lib/store/slices/linksSlice";
 import { getMe } from "../services/users";
 import { setProfile } from "@/lib/store/slices/profileSlice";
+import Analytics from "./Analytics";
 
 const HomePageContent = () => {
   const activeTab = useAppSelector((state) => state.homeTabs.activeTab);
@@ -44,13 +45,24 @@ const HomePageContent = () => {
 
   return (
     <div className="flex w-full px-4">
-      <div className="bg-white rounded-md w-1/3 mr-4 p-6 hidden lg:flex justify-center items-center">
-        <Preview />
-      </div>
-      <div className="bg-white rounded-md w-full lg:w-2/3 p-6">
-        {activeTab === "links" && <Links />}
-        {activeTab === "profile" && <Profile />}
-      </div>
+      {(activeTab === "links" || activeTab === "profile") && (
+        <>
+          <div className="bg-white rounded-md w-1/3 mr-4 p-6 hidden lg:flex justify-center items-center">
+            <Preview />
+          </div>
+      
+          <div className="bg-white rounded-md w-full lg:w-2/3 p-6">
+            {activeTab === "links" && <Links />}
+            {activeTab === "profile" && <Profile />}
+          </div>
+        </>
+      )}
+
+      {activeTab === "analytics" && (
+        <div className="bg-white rounded-md p-6 w-full">
+          <Analytics />
+        </div>
+      )}
     </div>
   )
 }
