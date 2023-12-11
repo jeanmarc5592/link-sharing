@@ -43,6 +43,8 @@ const HomePageContent = () => {
     dispatch(setProfile(getMeQuery.data));
   }, [getMeQuery.data, dispatch]);
 
+  // TODO: Fetch analytics data and dispatch to redux store
+
   return (
     <div className="flex w-full px-4">
       {(activeTab === "links" || activeTab === "profile") && (
