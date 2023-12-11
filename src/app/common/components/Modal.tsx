@@ -1,7 +1,5 @@
 import { Fragment, PropsWithChildren, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import Typography from './Typography';
 
 interface ModalProps extends PropsWithChildren {
   open: boolean;
