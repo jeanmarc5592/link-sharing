@@ -110,26 +110,26 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
       </FormProvider>
 
       <Modal open={modalOpen} onClose={closeModal}>
-          <Typography variant="Heading S" className="mb-4">Are you sure to remove the link?</Typography>
-          <Typography>All your analytics will also be removed and can not be restored later.</Typography>
+        <Typography variant="Heading S" className="mb-4">Are you sure to remove the link?</Typography>
+        <Typography>All your analytics will also be removed and can not be restored later.</Typography>
           
-          <div className="flex w-fit mt-8 mx-auto">
-            <Button 
-              dense 
-              onClick={closeModal}
-              variant="secondary" 
-              className="mr-4"
-            >
-              Cancel
-            </Button>
-            <Button 
-              dense 
-              onClick={handleRemove} 
-              isLoading={deleteLinkMutation.isLoading}
-            >
-              Remove
-            </Button>
-          </div>
+        <div className="flex w-fit mt-8 mx-auto">
+          <Button 
+            dense 
+            onClick={closeModal}
+            variant="secondary" 
+            className="mr-4"
+          >
+            Cancel
+          </Button>
+          <Button 
+            dense 
+            onClick={handleRemove} 
+            isLoading={deleteLinkMutation.isLoading}
+          >
+            Remove
+          </Button>
+        </div>
       </Modal>
     </div>
   )
