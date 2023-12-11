@@ -105,6 +105,8 @@ const LinkButton: React.FC<LinkButtonProps> = ({ link, mode = "default" }) => {
       return;
     }
 
+    // TODO: Send link.id to /api/analytics (Increment "clicks")
+
     window.open(href, '_blank')?.focus();
   };
 
