@@ -2,11 +2,7 @@ import { User } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface ProfileState {
-  firstName: string | null;
-  lastName: string | null;
-  email: string;
-  picture: string | null;
+interface ProfileState extends Partial<User> {
   isModified?: boolean;
 }
 
@@ -27,6 +23,7 @@ export const profileSlice = createSlice({
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
       state.picture = action.payload.picture;
+      state.showRemoveLinkModal = action.payload.showRemoveLinkModal;
       state.isModified = false;
     },
     updateProfileInfo: (state, action: PayloadAction<{ firstName: string | null; lastName: string | null; email: string; }>) => {

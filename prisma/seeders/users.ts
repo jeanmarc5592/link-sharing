@@ -9,7 +9,8 @@ export class UsersSeeder {
       update: {},
       create: {
         email: "user@email.com",
-        password: "$2a$12$XGxkVDB5AduU5nt1SaPAwe6X0.Nb4.UEd3i26fokZzQIE.eXwTlgG", // password
+        password: "$2a$12$XGxkVDB5AduU5nt1SaPAwe6X0.Nb4.UEd3i26fokZzQIE.eXwTlgG", // "password"
+        showRemoveLinkModal: true,
      }
     });
   }

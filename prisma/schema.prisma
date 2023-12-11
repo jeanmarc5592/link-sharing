@@ -9,15 +9,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  firstName String?
-  lastName  String?
-  picture   String?
-  links     Link[]
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  password            String
+  firstName           String?
+  lastName            String?
+  picture             String?
+  links               Link[]
+  showRemoveLinkModal Boolean @default(true)
+  createdAt           DateTime @default(now()) @map(name: "created_at")
+  updatedAt           DateTime @updatedAt @map(name: "updated_at")
 }
 
 model Link {

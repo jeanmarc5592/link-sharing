@@ -1,6 +1,8 @@
+import { StringUtils } from "@/lib/utils/string";
 import { AuthService } from "@/server/services/auth";
 import { HttpService } from "@/server/services/http";
 import { LinksService } from "@/server/services/links";
+import { UsersService } from "@/server/services/users";
 import { ValidationService } from "@/server/services/validation";
 import { NextRequestWithAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
@@ -10,6 +12,7 @@ export const DELETE = async (req: NextRequestWithAuth, route: { params: { id: st
   const linksService = new LinksService();
   const validationService = new ValidationService();
   const httpService = new HttpService();
+  const usersService = new UsersService();
 
   const isRequestValid = await authService.validateRequest(req);
 
@@ -36,6 +39,11 @@ export const DELETE = async (req: NextRequestWithAuth, route: { params: { id: st
   if (!userId) {
     return NextResponse.json({ message: 'No "sub" in token' }, { status: 400 });
   }
+
+  const queryParams = req.nextUrl.searchParams;
+  const showRemoveLinkModal = queryParams.get('showModal');
+
+  await usersService.update(userId, { showRemoveLinkModal: StringUtils.toBoolean(showRemoveLinkModal) });
   
   const links = await linksService.getLinksByUser(userId);
 

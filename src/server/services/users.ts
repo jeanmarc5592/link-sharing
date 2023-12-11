@@ -70,7 +70,7 @@ export class UsersService {
 
   private stripSensitiveData(user: User): Partial<User> {
     const { password, ...restUser } = user;
-    
+
     return restUser;
   }
 }

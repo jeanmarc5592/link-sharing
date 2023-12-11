@@ -11,8 +11,8 @@ export const addLink = async () => {
   return httpClient.post<Link>(ROUTES.links.href).then(res => res.data);
 }
 
-export const deleteLink = async (linkId: string) => {
-  return httpClient.delete<Link>(`${ROUTES.links.href}/${linkId}`).then(res => res.data);
+export const deleteLink = async (linkId: string, showModal: boolean) => {
+  return httpClient.delete<Link>(`${ROUTES.links.href}/${linkId}?showModal=${showModal}`).then(res => res.data);
 }
 
 export const editLinks = async (links: ModifiedLink[]) => {

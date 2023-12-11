@@ -18,6 +18,10 @@ import { toast } from "react-toastify";
 import DragAndDropIcon from "../common/components/icons/DragAndDropIcon";
 import Modal from "../common/components/Modal";
 import Button from "../common/components/Button";
+import { useAppSelector } from "../common/hooks/useAppSelector";
+import LoadingSpinner from "../common/components/LoadingSpinner";
+import { getMe } from "../services/users";
+import { getMessage } from "@reduxjs/toolkit/dist/actionCreatorInvariantMiddleware";
 
 interface SingleLinkProps {
   linkData: Link;
@@ -25,7 +29,11 @@ interface SingleLinkProps {
 }
 
 const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
+  const { showRemoveLinkModal } = useAppSelector((state) => state.profile);
+  const dispatch = useAppDispatch();
+
   const [modalOpen, setModalOpen] = useState(false);
+  const [dontAskAgain, setDontAskAgain] = useState(!showRemoveLinkModal);
 
   const getLinksQuery = useQuery({
     queryKey: ['links'],
@@ -35,11 +43,14 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
   const deleteLinkMutation = useMutation({
     mutationKey: ['links'],
     mutationFn: (linkId: string) => {
-      return deleteLink(linkId);
-    }
+      return deleteLink(linkId, !dontAskAgain);
+    },
   });
 
-  const dispatch = useAppDispatch();
+  const getMeQuery = useQuery({
+    queryKey: ['users'],
+    queryFn: getMe
+  });
   
   const methods = useForm<LinkSchemaType>({
     resolver: zodResolver(linkSchema),
@@ -51,6 +62,7 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
     try {
       await deleteLinkMutation.mutateAsync(linkData.id);
       getLinksQuery.refetch();
+      getMeQuery.refetch();
       closeModal();
     } catch (error) {
       console.error(error);
@@ -65,6 +77,10 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
   const updatePlatform = (platformObject: PlatformObject) => {
     dispatch(updateLink({ link: { ...linkData, platform: platformObject.id }, index }));
   };
+
+  const handleDontAskAgain = (e: ChangeEvent<HTMLInputElement>) => {
+    setDontAskAgain(e.target.checked);
+  }
 
   const openModal = () => {
     setModalOpen(true);
@@ -82,12 +98,22 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
             <DragAndDropIcon />
             <Typography className="font-semibold ml-2">Link #{index + 1}</Typography>
           </span>
-          <button 
-            onClick={openModal} 
-            className="text-custom-gray hover:text-custom-purple transition-all"
+
+          {showRemoveLinkModal ? (
+            <button 
+              onClick={openModal} 
+              className="text-custom-gray hover:text-custom-purple transition-all"
             >
               Remove
-          </button>
+            </button>
+          ) : (
+            <button 
+              onClick={handleRemove} 
+              className="text-custom-gray hover:text-custom-purple transition-all"
+            >
+              {deleteLinkMutation.isLoading ? <LoadingSpinner variant="secondary" /> : "Remove"}
+            </button>
+          )}
         </div>
 
         <Dropdown
@@ -109,9 +135,22 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
         />
       </FormProvider>
 
-      <Modal open={modalOpen} onClose={closeModal}>
-        <Typography variant="Heading S" className="mb-4">Are you sure to remove the link?</Typography>
-        <Typography>All your analytics will also be removed and can not be restored later.</Typography>
+      <Modal open={modalOpen && !!showRemoveLinkModal} onClose={closeModal}>
+        <Typography variant="Heading S" className="mb-4">Are you sure to remove this link?</Typography>
+        <Typography className="mb-6">All your analytics will also be removed and can not be restored later.</Typography>
+
+        <div className="flex items-center justify-center">
+          <input 
+            id="show-remove-link-modal" 
+            type="checkbox" 
+            className="w-4 h-4 mr-2 text-custom-purple bg-gray-100 border-gray-300 rounded focus:ring-custom-purple" 
+            checked={dontAskAgain}
+            onChange={handleDontAskAgain}
+          />
+          <label htmlFor="show-remove-link-modal">
+            <Typography>Don&apos;t ask again</Typography>
+          </label>
+        </div>
           
         <div className="flex w-fit mt-8 mx-auto">
           <Button 
