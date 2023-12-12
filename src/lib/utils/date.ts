@@ -16,4 +16,22 @@ export class DateUtils {
     
     return date.toLocaleDateString('en-US', options);
   }
+
+  static generateLast7Days(): Date[] {
+    const today = this.getToday();
+    const last7Days: Date[] = [];
+
+    let currentDate = new Date(today);
+
+    for (let i = 0; i < 7; i++) {
+      last7Days.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() - 1);
+    }
+
+    return last7Days.reverse();
+  }
+
+  static getDate(originalDate: Date): string {
+    return originalDate.toISOString().split('T')[0];
+  }
 }

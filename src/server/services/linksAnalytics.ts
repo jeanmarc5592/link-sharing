@@ -19,10 +19,12 @@ export class LinksAnalyticsService {
   }
 
   mapData (analytics: LinkAnalytics[]): { date: string; clicks: string; }[] {
-    return analytics.map((data) => {
+    const filledAnalytics = this.fillMissingDays(analytics);
+
+    return filledAnalytics.map((data) => {
       return {
-        date: this.dateUtils.formatDate(data.createdAt),
-        clicks: data.clicks.toString(),
+        date: this.dateUtils.formatDate(data.date),
+        clicks: data.clicks,
       };
     });
   }
@@ -45,11 +47,22 @@ export class LinksAnalyticsService {
         }
       });
 
-      // TODO: Fill the missing days 
       return analytics;
     } catch (error) {
       console.error(error);
       return null;
     }
   } 
+
+  private fillMissingDays(analytics: LinkAnalytics[]): { date: Date; clicks: string; }[]  {
+    const last7Days = this.dateUtils.generateLast7Days();
+
+    return last7Days.map((date) => {
+      const analyticsEntry = analytics.find((entry) => this.dateUtils.getDate(entry.createdAt) === this.dateUtils.getDate(date));
+      return {
+        date,
+        clicks: analyticsEntry ? analyticsEntry.clicks.toString() : "0"
+      }
+    })
+  }
 }
