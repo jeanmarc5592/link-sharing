@@ -2,6 +2,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { ModifiedLink } from "@/lib/store/slices/linksSlice";
 import { httpClient } from "@/lib/utils/httpClient";
 import { Link } from "@prisma/client";
+import { AnalyticsData } from "../components/types";
 
 export const getLinks = async () => {
   return httpClient.get<Link[]>(ROUTES.links.href).then(res => res.data);
@@ -17,4 +18,8 @@ export const deleteLink = async (linkId: string, showModal: boolean) => {
 
 export const editLinks = async (links: ModifiedLink[]) => {
   return httpClient.put<Link[]>(ROUTES.links.href, links).then(res => res.data);
+}
+
+export const getLinkAnalytics = async () => {
+  return httpClient.get<AnalyticsData[]>(ROUTES.links.analytics.href).then(res => res.data);
 }

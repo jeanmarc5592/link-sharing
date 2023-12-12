@@ -16,6 +16,10 @@ export const ROUTES = {
   links: {
     name: "links",
     href: "api/links",
+    analytics: {
+      name: "linkAnalytics",
+      href: "api/links/analytics",
+    }
   },
   users: {
     name: "users",
