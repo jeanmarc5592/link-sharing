@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { useAppSelector } from "../common/hooks/useAppSelector"
-import { getLinks } from "../services/links";
+import { getLinkAnalytics, getLinks } from "../services/links";
 import Links from "./Links";
 import Preview from "./PhonePreview";
 import Profile from "./Profile";
@@ -12,6 +12,7 @@ import { setList } from "@/lib/store/slices/linksSlice";
 import { getMe } from "../services/users";
 import { setProfile } from "@/lib/store/slices/profileSlice";
 import Analytics from "./Analytics";
+import { setAnalyticsData } from "@/lib/store/slices/analyticsSlice";
 
 const HomePageContent = () => {
   const activeTab = useAppSelector((state) => state.homeTabs.activeTab);
@@ -25,6 +26,11 @@ const HomePageContent = () => {
   const getMeQuery = useQuery({
     queryKey: ['users'],
     queryFn: getMe
+  });
+
+  const getLinkAnalyticsQuery = useQuery({
+    queryKey: ["linkAnalytics"],
+    queryFn: getLinkAnalytics,
   });
 
   useEffect(() => {
@@ -43,7 +49,13 @@ const HomePageContent = () => {
     dispatch(setProfile(getMeQuery.data));
   }, [getMeQuery.data, dispatch]);
 
-  // TODO: Fetch analytics data and dispatch to redux store
+  useEffect(() => {
+    if (!getLinkAnalyticsQuery.data) {
+      return;
+    }
+
+    dispatch(setAnalyticsData(getLinkAnalyticsQuery.data));
+  }, [getLinkAnalyticsQuery.data, dispatch]);
 
   return (
     <div className="flex w-full px-4">

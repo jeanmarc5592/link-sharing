@@ -1,26 +1,9 @@
 import Typography from "../common/components/Typography"
 import AnalyticsChart from "./AnalyticsChart";
 import { useAppSelector } from "../common/hooks/useAppSelector";
-import { useQuery } from "@tanstack/react-query";
-import { getLinkAnalytics } from "../services/links";
-import { useEffect } from "react";
 
 const Analytics = () => {
-  const getLinkAnalyticsQuery = useQuery({
-    queryKey: ["linkAnalytics"],
-    queryFn: getLinkAnalytics,
-  });
-
   const data = useAppSelector((state) => state.analytics.data);
-
-  useEffect(() => {
-    if (!getLinkAnalyticsQuery.data) {
-      return;
-    }
-
-    // TODO: Dispatch to redux
-    console.log(getLinkAnalyticsQuery.data);
-  }, [getLinkAnalyticsQuery.data]);
 
   return (
     <div className="overflow-auto">

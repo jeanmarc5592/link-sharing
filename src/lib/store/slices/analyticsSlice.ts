@@ -83,7 +83,13 @@ const initialState: AnalyticsState = {
 export const analyticsSlice = createSlice({
   name: 'analytics',
   initialState,
-  reducers: {}
+  reducers: {
+    setAnalyticsData(state, action: PayloadAction<AnalyticsData[]>) {
+      state.data = action.payload;
+    }
+  }
 });
+
+export const { setAnalyticsData } = analyticsSlice.actions;
 
 export default analyticsSlice.reducer;
