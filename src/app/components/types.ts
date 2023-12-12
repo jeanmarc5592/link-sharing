@@ -3,7 +3,7 @@ import { Platform } from "@prisma/client";
 export type AnalyticsData = {
   linkName: Platform;
   analytics: {
-    date: string;
+    date: Date;
     clicks: string;
   }[]
 }

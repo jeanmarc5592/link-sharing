@@ -1,7 +1,7 @@
-import { Link, PrismaClient } from "@prisma/client";
+import { Link, LinkAnalytics, PrismaClient } from "@prisma/client";
 import prisma from "@/lib/db/prisma";
-import { ArrayUtils } from "@/lib/utils/array";
 import { ModifiedLink } from "@/lib/store/slices/linksSlice";
+import { AnalyticsData } from "@/app/components/types";
 
 export class LinksService {
   private readonly prisma: PrismaClient;
@@ -130,6 +130,81 @@ export class LinksService {
       console.error(error);
       return null;
     }
+  }
+
+  async getAnalytics(links: Link[]): Promise<AnalyticsData[] | null> {
+    if (links.length === 0) {
+      return [];
+    }
+
+    const linksAnalytics: AnalyticsData[] = [];
+
+    try {
+      await Promise.all(links.map(async (link) => {
+        const analyticsData = await this.getAnalyticsByTimespan("7D", link.id);
+
+        const analytics: AnalyticsData = {
+          linkName: link.platform,
+          analytics: this.mapAnalyticsData(analyticsData),
+        };
+
+        linksAnalytics.push(analytics);
+      }));
+
+      return linksAnalytics;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  // TODO: Move to "LinksAnalyticsService"
+  private async getAnalyticsByTimespan(span: "7D", linkId: string): Promise<LinkAnalytics[]> {
+    if (span === "7D") {
+      return await this.getAnalyticsLast7Days(linkId) || [];
+    }
+
+    return [];
+  }
+
+  // TODO: Move to "LinksAnalyticsService"
+  private async getAnalyticsLast7Days(linkId: string): Promise<LinkAnalytics[] | null> {
+    // TODO: Move to "DateUtils"
+    const today = new Date().toISOString().split('T')[0];
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const formattedSevenDaysAgo = sevenDaysAgo.toISOString().split('T')[0]; 
+
+    try {
+      const analytics = await this.prisma.linkAnalytics.findMany({
+        where: {
+          linkId,
+          createdAt: {
+            gte: new Date(formattedSevenDaysAgo + 'T00:00:00.000Z'),
+            lte: new Date(today + 'T23:59:59.999Z'),
+          },
+        },
+        orderBy: {
+          createdAt: 'asc',
+        }
+      });
+      console.log(analytics)
+
+      return analytics;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  } 
+
+  // TODO: Move to "LinksAnalyticsService"
+  private mapAnalyticsData (analytics: LinkAnalytics[]): { date: Date; clicks: string; }[] {
+    return analytics.map((data) => {
+      return {
+        date: data.createdAt,
+        clicks: data.clicks.toString(),
+      };
+    });
   }
 
   private checkLinksModification(links: ModifiedLink[]): null | "OK" {
