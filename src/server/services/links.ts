@@ -188,7 +188,6 @@ export class LinksService {
           createdAt: 'asc',
         }
       });
-      console.log(analytics)
 
       return analytics;
     } catch (error) {
