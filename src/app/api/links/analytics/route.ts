@@ -30,7 +30,6 @@ export const GET = async (req: NextRequestWithAuth) => {
   
   const linkAnalytics = await linksService.getAnalytics(links);
 
-  // Check if something went wrong and return an error response
   if (!linkAnalytics) {
     return NextResponse.json({ message: 'Something went wrong reading your link analytics' }, { status: 500 });
   }
