@@ -7,8 +7,10 @@ export class LinkAnalyticsSeeder {
     return await this.prisma.linkAnalytics.create({
       data: {
         linkId,
-        clicks: 23,
+        clicks: 23, // TODO: Choose random number
       }
     });
   }
+
+  // TODO: Implement "generateMany"
 }
