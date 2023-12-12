@@ -36,7 +36,7 @@ model Link {
 model LinkAnalytics {
   id        String   @id @default(uuid())
   linkId    String
-  link      Link     @relation(fields: [linkId], references: [id])
+  link      Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
   clicks    Int      @default(1)
   createdAt DateTime @default(now()) @map(name: "created_at")
 }
