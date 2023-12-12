@@ -19,7 +19,7 @@ export class LinksAnalyticsService {
   mapData (analytics: LinkAnalytics[]): { date: Date; clicks: string; }[] {
     return analytics.map((data) => {
       return {
-        date: data.createdAt,
+        date: data.createdAt, // TODO: Format into something like "Dec 5"
         clicks: data.clicks.toString(),
       };
     });
@@ -46,6 +46,7 @@ export class LinksAnalyticsService {
         }
       });
 
+      // TODO: Fill the missing days 
       return analytics;
     } catch (error) {
       console.error(error);
