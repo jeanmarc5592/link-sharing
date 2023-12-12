@@ -4,7 +4,7 @@ import Typography from '../common/components/Typography'
 import Button from '../common/components/Button'
 import LinksList from './LinksList'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { addLink, editLinks, getLinks } from '../services/links'
+import { addLink, editLinks, getLinkAnalytics, getLinks } from '../services/links'
 import { ModifiedLink } from '@/lib/store/slices/linksSlice'
 import { toast } from 'react-toastify'
 import { useAppSelector } from '../common/hooks/useAppSelector'
@@ -14,6 +14,11 @@ const Links = () => {
   const getLinksQuery = useQuery({
     queryKey: ['links'],
     queryFn: getLinks,
+  });
+
+  const getLinkAnalyticsQuery = useQuery({
+    queryKey: ["linkAnalytics"],
+    queryFn: getLinkAnalytics,
   });
 
   const addNewLinkMutation = useMutation({
@@ -50,6 +55,7 @@ const Links = () => {
 
       await editLinksMutation.mutateAsync(modifiedLinks);
       getLinksQuery.refetch();
+      getLinkAnalyticsQuery.refetch();
 
       toast.success('Your links have been saved successfully!');
     } catch (error) {

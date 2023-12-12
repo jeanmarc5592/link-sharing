@@ -13,7 +13,7 @@ import { useAppDispatch } from "../common/hooks/useAppDispatch";
 import { updateLink } from "@/lib/store/slices/linksSlice";
 import { PlatformObject, PLATFORMS } from '../../lib/constants/platforms';
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { deleteLink, getLinks } from "../services/links";
+import { deleteLink, getLinkAnalytics, getLinks } from "../services/links";
 import { toast } from "react-toastify";
 import DragAndDropIcon from "../common/components/icons/DragAndDropIcon";
 import Modal from "../common/components/Modal";
@@ -51,6 +51,11 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
     queryKey: ['users'],
     queryFn: getMe
   });
+
+  const getLinkAnalyticsQuery = useQuery({
+    queryKey: ["linkAnalytics"],
+    queryFn: getLinkAnalytics,
+  });
   
   const methods = useForm<LinkSchemaType>({
     resolver: zodResolver(linkSchema),
@@ -63,6 +68,7 @@ const SingleLink: React.FC<SingleLinkProps> = ({ index, linkData }) => {
       await deleteLinkMutation.mutateAsync(linkData.id);
       getLinksQuery.refetch();
       getMeQuery.refetch();
+      getLinkAnalyticsQuery.refetch();
       closeModal();
     } catch (error) {
       console.error(error);
