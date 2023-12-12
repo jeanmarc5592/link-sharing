@@ -1,4 +1,5 @@
-import { PrismaClient, Link, LinkAnalytics } from "@prisma/client";
+import { PrismaClient, LinkAnalytics } from "@prisma/client";
+import { faker } from '@faker-js/faker';
 
 export class LinkAnalyticsSeeder {
   constructor(private readonly prisma: PrismaClient) {}
@@ -7,10 +8,8 @@ export class LinkAnalyticsSeeder {
     return await this.prisma.linkAnalytics.create({
       data: {
         linkId,
-        clicks: 23, // TODO: Choose random number
+        clicks: faker.number.int(250),
       }
     });
   }
-
-  // TODO: Implement "generateMany"
 }
