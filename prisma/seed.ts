@@ -13,7 +13,7 @@ const main = async () => {
   const link = await linksSeeder.generateOne(user.id);
 
   const linkAnalyticsSeeder = new LinkAnalyticsSeeder(prisma);
-  await linkAnalyticsSeeder.generateOne(link.id);
+  await linkAnalyticsSeeder.generateMany(link.id);
 };
 
 main()
