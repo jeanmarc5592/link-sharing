@@ -15,6 +15,8 @@ import FreecodecampIcon from "./icons/FreecodecampIcon";
 import GitlabIcon from "./icons/GitlabIcon";
 import HashnodeIcon from "./icons/HashnodeIcon";
 import StackoverflowIcon from "./icons/StackoverflowIcon";
+import { useMutation } from "@tanstack/react-query";
+import { addLinkAnalytics } from "@/app/services/links";
 
 const getLinkButtonColor = (platform: Platform) => {
   switch (platform) {
@@ -92,7 +94,14 @@ interface LinkButtonProps {
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({ link, mode = "default" }) => {
-  const { platform, href } = link;
+  const addLinkAnalyticsMutation = useMutation({
+    mutationKey: ["linkAnalytics"],
+    mutationFn: async (linkId: string) => {
+      return addLinkAnalytics(linkId);
+    }
+  });
+
+  const { platform, href, id } = link;
 
   const spacings = mode === "default" ? "p-5 mb-6" : "p-4 mb-4 cursor-default";
   const color = getLinkButtonColor(platform);
@@ -100,14 +109,18 @@ const LinkButton: React.FC<LinkButtonProps> = ({ link, mode = "default" }) => {
   const styles = clsx("rounded-md transition-all w-full flex justify-between items-center", color, spacings);
   const label = StringUtils.capitalize(platform);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (mode === "preview" || !href) {
       return;
     }
 
-    // TODO: Send link.id to /api/analytics (Increment "clicks")
+    try {
+      await addLinkAnalyticsMutation.mutateAsync(id);
 
-    window.open(href, '_blank')?.focus();
+      // window.open(href, '_blank')?.focus(); 
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
