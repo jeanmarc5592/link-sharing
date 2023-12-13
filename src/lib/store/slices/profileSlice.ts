@@ -2,7 +2,12 @@ import { User } from "@prisma/client";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface ProfileState extends Partial<User> {
+interface ProfileState {
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
+  picture: string | null;
+  showRemoveLinkModal: boolean;
   isModified?: boolean;
 }
 
@@ -11,6 +16,7 @@ const initialState: ProfileState = {
   lastName: null,
   email: "",
   picture: null,
+  showRemoveLinkModal: true,
   isModified: false,
 };
 
