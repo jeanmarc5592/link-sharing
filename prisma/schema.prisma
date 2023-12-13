@@ -9,26 +9,36 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  firstName String?
-  lastName  String?
-  picture   String?
-  links     Link[]
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  password            String
+  firstName           String?
+  lastName            String?
+  picture             String?
+  links               Link[]
+  showRemoveLinkModal Boolean  @default(true)
+  createdAt           DateTime @default(now()) @map(name: "created_at")
+  updatedAt           DateTime @updatedAt @map(name: "updated_at")
 }
 
 model Link {
-  id        String   @id @default(uuid())
+  id        String          @id @default(uuid())
   platform  Platform
   href      String?
-  User      User     @relation(fields: [userId], references: [id])
+  User      User            @relation(fields: [userId], references: [id])
   userId    String
-  order     Int      @default(1)
+  order     Int             @default(1)
+  analytics LinkAnalytics[]
+  createdAt DateTime        @default(now()) @map(name: "created_at")
+  updatedAt DateTime        @updatedAt @map(name: "updated_at")
+}
+
+model LinkAnalytics {
+  id        String   @id @default(uuid())
+  linkId    String
+  link      Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  clicks    Int      @default(1)
   createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
 }
 
 enum Platform {

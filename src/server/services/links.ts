@@ -1,13 +1,16 @@
-import { Link, PrismaClient } from "@prisma/client";
+import { Link, LinkAnalytics, PrismaClient } from "@prisma/client";
 import prisma from "@/lib/db/prisma";
-import { ArrayUtils } from "@/lib/utils/array";
 import { ModifiedLink } from "@/lib/store/slices/linksSlice";
+import { AnalyticsData } from "@/app/components/types";
+import { LinksAnalyticsService } from "./linksAnalytics";
 
 export class LinksService {
   private readonly prisma: PrismaClient;
+  private readonly linksAnalyticsService: LinksAnalyticsService;
 
   constructor() {
     this.prisma = prisma;
+    this.linksAnalyticsService = new LinksAnalyticsService();
   }
 
   async getLinksByUser(userId: string): Promise<Link[] | null> {
@@ -16,6 +19,17 @@ export class LinksService {
         where: { userId }
       });
       return this.sortByOrder(links);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async getLinkById(id: string): Promise<Link | null> {
+    try {
+      return await this.prisma.link.findFirst({
+        where: { id }
+      });
     } catch (error) {
       console.error(error);
       return null;
@@ -130,6 +144,56 @@ export class LinksService {
       console.error(error);
       return null;
     }
+  }
+
+  async getAnalytics(links: Link[]): Promise<AnalyticsData[] | null> {
+    if (links.length === 0) {
+      return [];
+    }
+
+    const linksAnalytics: AnalyticsData[] = [];
+
+    try {
+      await Promise.all(links.map(async (link) => {
+        const analyticsData = await this.linksAnalyticsService.getByTimespan("7D", link.id) as LinkAnalytics[];
+
+        const analytics: AnalyticsData = {
+          linkName: link.platform,
+          analytics: this.linksAnalyticsService.mapData(analyticsData),
+        };
+
+        linksAnalytics.push(analytics);
+      }));
+
+      return linksAnalytics;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async addAnalytics(linkId: string): Promise<LinkAnalytics | null> {
+    const link = await this.getLinkById(linkId);
+
+    if (!link) {
+      return null;
+    }
+
+    let analyticsDataOfToday = await this.linksAnalyticsService.getByTimespan("TODAY", linkId) as LinkAnalytics | null;
+
+    if (!analyticsDataOfToday) {
+      const newAnalytics = await this.linksAnalyticsService.create(linkId);
+
+      if (!newAnalytics) {
+        return null;
+      }
+
+      analyticsDataOfToday = newAnalytics;
+    } else {
+      analyticsDataOfToday = await this.linksAnalyticsService.update(analyticsDataOfToday.id, { clicks: analyticsDataOfToday.clicks + 1 });
+    }
+
+    return analyticsDataOfToday;
   }
 
   private checkLinksModification(links: ModifiedLink[]): null | "OK" {

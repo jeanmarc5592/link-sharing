@@ -1,3 +1,4 @@
+import analyticsSlice from './slices/analyticsSlice';
 import homeTabsReducer from './slices/homeTabsSlice'
 import linksReducer from './slices/linksSlice'
 import profileReducer from'./slices/profileSlice';
@@ -8,6 +9,7 @@ export const store = configureStore({
     homeTabs: homeTabsReducer,
     links: linksReducer,
     profile: profileReducer,
+    analytics: analyticsSlice,
   },
 })
 

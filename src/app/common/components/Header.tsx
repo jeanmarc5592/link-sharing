@@ -10,6 +10,7 @@ import LogoIcon from './icons/LogoIcon'
 import PreviewIcon from './icons/PreviewIcon'
 import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/lib/constants/routes'
+import TrendUpIcon from './icons/TrendUpIcon'
 
 const Header = () => {
   const activeTab = useAppSelector((state) => state.homeTabs.activeTab);
@@ -38,6 +39,12 @@ const Header = () => {
           id="profile"
           isActive={activeTab === "profile"}
           icon={<ProfileDetailsIcon isSelected={activeTab === "profile"} />}
+        />
+        <Tab
+          label="Analytics"
+          id="analytics"
+          isActive={activeTab === "analytics"}
+          icon={<TrendUpIcon isSelected={activeTab === "analytics"} />}
         />
       </div>
 
