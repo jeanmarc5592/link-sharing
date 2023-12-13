@@ -2,6 +2,7 @@ import prisma from "@/lib/db/prisma";
 import { DateUtils } from "@/lib/utils/date";
 import { LinkAnalytics, PrismaClient } from "@prisma/client";
 
+type TimespanOptions = "7D" | "TODAY";
 export class LinksAnalyticsService {
   private readonly prisma: PrismaClient;
   private readonly dateUtils = DateUtils;
@@ -10,12 +11,43 @@ export class LinksAnalyticsService {
     this.prisma = prisma;
   }
 
-  async getByTimespan(span: "7D", linkId: string): Promise<LinkAnalytics[]> {
+  async getByTimespan(span: TimespanOptions, linkId: string): Promise<LinkAnalytics[] | LinkAnalytics | null> {
     if (span === "7D") {
       return await this.getLast7Days(linkId) || [];
     }
 
+    if (span === "TODAY") {
+      return await this.getToday(linkId) || null;
+    }
+
     return [];
+  }
+
+  async create(linkId: string): Promise<LinkAnalytics | null> {
+    try {
+      return await this.prisma.linkAnalytics.create({
+        data: {
+          linkId,
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async update(id: string, updates: Partial<LinkAnalytics>): Promise<LinkAnalytics | null> {
+    try {
+      return await this.prisma.linkAnalytics.update({
+        where: { id },
+        data: {
+          ...updates,
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   mapData (analytics: LinkAnalytics[]): { date: string; clicks: string; }[] {
@@ -53,6 +85,30 @@ export class LinksAnalyticsService {
       return null;
     }
   } 
+
+  private async getToday(linkId: string): Promise<LinkAnalytics | null> {
+    const today = this.dateUtils.getToday();
+
+    try {
+      const analytics = await this.prisma.linkAnalytics.findFirst({
+        where: {
+          linkId,
+          createdAt: {
+            gte: new Date(today + 'T00:00:00.000Z'),
+            lte: new Date(today + 'T23:59:59.999Z'),
+          },
+        },
+        orderBy: {
+          createdAt: 'asc',
+        }
+      });
+
+      return analytics;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
 
   private fillMissingDays(analytics: LinkAnalytics[]): { date: Date; clicks: string; }[]  {
     const last7Days = this.dateUtils.generateLast7Days();
