@@ -117,7 +117,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ link, mode = "default" }) => {
     try {
       await addLinkAnalyticsMutation.mutateAsync(id);
 
-      // window.open(href, '_blank')?.focus(); 
+      window.open(href, '_blank')?.focus(); 
     } catch (error) {
       console.error(error);
     }
