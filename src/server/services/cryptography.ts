@@ -1,7 +1,11 @@
 import { compare, hash } from "bcryptjs";
 
 export class CryptographyService {
-  async compareStrings(stringOne: string, stringTwo: string): Promise<null | "OK"> {
+  async compareStrings(stringOne: string | null, stringTwo: string | null): Promise<null | "OK"> {
+    if (!stringOne || !stringTwo) {
+      return null;
+    }
+
     const match = await compare(stringOne, stringTwo);
 
     if (!match) {
