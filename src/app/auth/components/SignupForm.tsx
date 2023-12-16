@@ -11,6 +11,7 @@ import { ROUTES } from '@/lib/constants/routes';
 import Button from '../../common/components/Button';
 import { SignupSchemaType, signupSchema } from '@/lib/validators/signup';
 import useSignup from '../hooks/useSignup';
+import { signIn } from 'next-auth/react';
 
 const SignupForm = () => {
   const methods = useForm<SignupSchemaType>({
@@ -20,6 +21,10 @@ const SignupForm = () => {
   const { onSubmit, isLoading } = useSignup();
 
   const { handleSubmit, formState: { errors }} = methods;
+
+  const onGoogleSignup = async () => {
+    await signIn("google");
+  };
 
   return (
     <AuthCard>
@@ -59,12 +64,24 @@ const SignupForm = () => {
           >
             Create new account
           </Button>
-
-          <Typography className="text-center">
-            Already have an account? <a className="text-custom-purple" href={ROUTES.auth.login.href}>Login</a>
-          </Typography>
         </form>
       </FormProvider>
+
+      <Typography className="mb-6 text-center">
+        or with
+      </Typography>
+
+      <Button
+        className="mb-6"
+        variant="secondary"
+        onClick={onGoogleSignup}
+      >
+        Google
+      </Button>
+
+      <Typography className="text-center">
+        Don&apos;t have an account? <a className="text-custom-purple" href={ROUTES.auth.signup.href}>Create account</a>
+      </Typography>
     </AuthCard>
   )
 }
