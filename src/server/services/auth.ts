@@ -6,6 +6,7 @@ import { User } from "@prisma/client";
 import { signupSchema } from "@/lib/validators/signup";
 import { HttpService } from "./http";
 import { NextRequestWithAuth } from "next-auth/middleware";
+import { GoogleProfile } from "next-auth/providers/google";
 
 export class AuthService {
   private usersService: UsersService;
@@ -67,9 +68,13 @@ export class AuthService {
       return null;
     }
 
-    const userToCreate: Pick<User, "email" | "password"> = {
+    const userToCreate: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture"> = {
       email: credentials!.email,
       password: await this.cryptographyService.hashString(credentials!.password),
+      googleId: null,
+      firstName: null,
+      lastName: null,
+      picture: null,
     };
 
     const user = await this.usersService.create(userToCreate);
@@ -100,5 +105,32 @@ export class AuthService {
     }
 
     return "OK";
+  }
+
+  async authenticateWithGoogle(profile: GoogleProfile): Promise<Pick<User, "id" | "email">> {
+    const userExists = await this.usersService.findByGoogleId(profile.sub);
+
+    if (userExists) {
+      return {
+        id: userExists.id,
+        email: userExists.email,
+      };
+    }
+
+    const userToCreate: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture"> = {
+      email: profile.email,
+      googleId: profile.sub,
+      password: null,
+      firstName: profile.given_name,
+      lastName: profile.family_name,
+      picture: profile.picture,
+    };
+
+    const user = await this.usersService.create(userToCreate);
+
+    return {
+      id: user?.id || "% ID %",
+      email: user?.email || "% EMAIL %",
+    };
   }
 }

@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import { credentialsLogin } from "./providers/credentials-login";
 import { credentialsSignup } from "./providers/credentials-signup";
+import { googleAuth } from "./providers/google-auth";
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -13,6 +14,7 @@ export const authOptions: NextAuthOptions = {
   providers: [
     credentialsLogin,
     credentialsSignup,
+    googleAuth,
   ],
   callbacks: {
     session: ({ session, token }) => {

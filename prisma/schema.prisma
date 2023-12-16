@@ -11,11 +11,12 @@ datasource db {
 model User {
   id                  String   @id @default(uuid())
   email               String   @unique
-  password            String
+  password            String?
   firstName           String?
   lastName            String?
   picture             String?
   links               Link[]
+  googleId            String?
   showRemoveLinkModal Boolean  @default(true)
   createdAt           DateTime @default(now()) @map(name: "created_at")
   updatedAt           DateTime @updatedAt @map(name: "updated_at")

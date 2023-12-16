@@ -1,4 +1,3 @@
-import { UserUpdates } from "@/app/services/types";
 import prisma from "@/lib/db/prisma";
 import { User } from "@prisma/client";
 
@@ -23,7 +22,7 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User | null> {
     try {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: { email }
       });
      
@@ -39,7 +38,25 @@ export class UsersService {
     }
   }
 
-  async create(user: Pick<User, "email" | "password">): Promise<User | null> {
+  async findByGoogleId(googleId: string): Promise<User | null> {
+    try {
+      const user = await prisma.user.findFirst({
+        where: { googleId }
+      });
+     
+      if (!user) {
+        console.log(`User with google id "${googleId}" not found.`)
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async create(user: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture">): Promise<User | null> {
     try {
       const createdUser = await prisma.user.create({
         data: {
