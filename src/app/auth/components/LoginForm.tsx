@@ -11,6 +11,8 @@ import AuthCard from "./AuthCard"
 import { useForm, FormProvider } from "react-hook-form";
 import { LoginSchemaType, loginSchema } from "@/lib/validators/login";
 import useLogin from "../hooks/useLogin";
+import { signIn } from "next-auth/react";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
   const methods = useForm<LoginSchemaType>({
@@ -20,6 +22,10 @@ const LoginForm = () => {
   const { onSubmit, isLoading } = useLogin();
 
   const { handleSubmit, formState: { errors }} = methods;
+
+  const onGoogleLogin = async () => {
+    await signIn("google");
+  };
 
   return (
     <AuthCard>
@@ -51,12 +57,24 @@ const LoginForm = () => {
           >
             Login
           </Button>
-
-          <Typography className="text-center">
-            Don&apos;t have an account? <a className="text-custom-purple" href={ROUTES.auth.signup.href}>Create account</a>
-          </Typography>
         </form>
       </FormProvider>
+
+      <Typography className="mb-6 text-center">
+        or with
+      </Typography>
+
+      <Button
+        className="mb-6"
+        variant="secondary"
+        onClick={onGoogleLogin}
+      >
+        Google
+      </Button>
+
+      <Typography className="text-center">
+        Don&apos;t have an account? <a className="text-custom-purple" href={ROUTES.auth.signup.href}>Create account</a>
+      </Typography>
     </AuthCard>
   )
 }
