@@ -110,7 +110,7 @@ export class AuthService {
     return "OK";
   }
 
-  async authenticateWithGoogle(profile: GoogleProfile): Promise<Pick<User, "id" | "email">> {
+  async authenticateWithGoogle(profile: GoogleProfile): Promise<Pick<User, "id" | "email"> | null> {
     const userExists = await this.usersService.findByGoogleId(profile.sub);
 
     if (userExists) {
@@ -132,13 +132,17 @@ export class AuthService {
 
     const user = await this.usersService.create(userToCreate);
 
+    if (!user) {
+      return null;
+    }
+
     return {
-      id: user?.id || "% ID %",
-      email: user?.email || "% EMAIL %",
+      id: user.id,
+      email: user.email,
     };
   }
 
-  async authenticateWithGithub(profile: GithubProfile): Promise<Pick<User, "id" | "email">> {
+  async authenticateWithGithub(profile: GithubProfile): Promise<Pick<User, "id" | "email"> | null> {
     const userExists = await this.usersService.findByGithubId(String(profile.id));
 
     if (userExists) {
@@ -160,9 +164,13 @@ export class AuthService {
 
     const user = await this.usersService.create(userToCreate);
 
+    if (!user) {
+      return null;
+    }
+
     return {
-      id: user?.id || "% ID %",
-      email: user?.email || "% EMAIL %",
+      id: user.id,
+      email: user.email,
     };
   }
 }
