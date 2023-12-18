@@ -9,8 +9,6 @@ export const githubAuth = GithubProvider({
 
     const user = await authService.authenticateWithGithub(profile);
 
-    console.log(user);
-
     return {
       id: user.id,
       email: user.id,
