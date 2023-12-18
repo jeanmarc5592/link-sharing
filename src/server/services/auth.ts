@@ -7,6 +7,7 @@ import { signupSchema } from "@/lib/validators/signup";
 import { HttpService } from "./http";
 import { NextRequestWithAuth } from "next-auth/middleware";
 import { GoogleProfile } from "next-auth/providers/google";
+import { GithubProfile } from "next-auth/providers/github";
 
 export class AuthService {
   private usersService: UsersService;
@@ -68,10 +69,11 @@ export class AuthService {
       return null;
     }
 
-    const userToCreate: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture"> = {
+    const userToCreate: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture"> = {
       email: credentials!.email,
       password: await this.cryptographyService.hashString(credentials!.password),
       googleId: null,
+      githubId: null,
       firstName: null,
       lastName: null,
       picture: null,
@@ -117,14 +119,43 @@ export class AuthService {
       };
     }
 
-    const userToCreate: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture"> = {
+    const userToCreate: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture"> = {
       email: profile.email,
       googleId: profile.sub,
+      githubId: null,
       password: null,
       firstName: profile.given_name,
       lastName: profile.family_name,
       picture: profile.picture,
     };
+
+    const user = await this.usersService.create(userToCreate);
+
+    return {
+      id: user?.id || "% ID %",
+      email: user?.email || "% EMAIL %",
+    };
+  }
+
+  async authenticateWithGithub(profile: GithubProfile): Promise<Pick<User, "id" | "email">> {
+    const userExists = await this.usersService.findByGithubId(String(profile.id));
+
+    if (userExists) {
+      return {
+        id: userExists.id,
+        email: userExists.email,
+      };
+    }
+
+    const userToCreate: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture"> = {
+      email: profile.email || "",
+      password: null,
+      googleId: null,
+      githubId: String(profile.id),
+      firstName: profile.name,
+      lastName: "",
+      picture: profile.avatar_url,
+    }
 
     const user = await this.usersService.create(userToCreate);
 

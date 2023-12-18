@@ -56,7 +56,25 @@ export class UsersService {
     }
   }
 
-  async create(user: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture">): Promise<User | null> {
+  async findByGithubId(githubId: string): Promise<User | null> {
+    try {
+      const user = await prisma.user.findFirst({
+        where: { githubId }
+      });
+     
+      if (!user) {
+        console.log(`User with github id "${githubId}" not found.`)
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async create(user: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture">): Promise<User | null> {
     try {
       const createdUser = await prisma.user.create({
         data: {
