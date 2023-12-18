@@ -8,6 +8,7 @@ import { HttpService } from "./http";
 import { NextRequestWithAuth } from "next-auth/middleware";
 import { GoogleProfile } from "next-auth/providers/google";
 import { GithubProfile } from "next-auth/providers/github";
+import { UserToCreate } from "./auth.types";
 
 export class AuthService {
   private usersService: UsersService;
@@ -69,7 +70,7 @@ export class AuthService {
       return null;
     }
 
-    const userToCreate: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture"> = {
+    const userToCreate: UserToCreate = {
       email: credentials!.email,
       password: await this.cryptographyService.hashString(credentials!.password),
       googleId: null,
@@ -119,7 +120,7 @@ export class AuthService {
       };
     }
 
-    const userToCreate: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture"> = {
+    const userToCreate: UserToCreate = {
       email: profile.email,
       googleId: profile.sub,
       githubId: null,
@@ -147,7 +148,7 @@ export class AuthService {
       };
     }
 
-    const userToCreate: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture"> = {
+    const userToCreate: UserToCreate = {
       email: profile.email || "",
       password: null,
       googleId: null,

@@ -1,5 +1,6 @@
 import prisma from "@/lib/db/prisma";
 import { User } from "@prisma/client";
+import { UserToCreate } from "./auth.types";
 
 export class UsersService {
   async findById(id: string): Promise<Partial<User> | null> {
@@ -74,7 +75,7 @@ export class UsersService {
     }
   }
 
-  async create(user: Pick<User, "email" | "password" | "googleId" | "githubId" | "firstName" | "lastName" | "picture">): Promise<User | null> {
+  async create(user: UserToCreate): Promise<User | null> {
     try {
       const createdUser = await prisma.user.create({
         data: {
