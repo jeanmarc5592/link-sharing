@@ -63,9 +63,9 @@ export class AuthService {
       return null;
     }
 
-    const userExists = await this.usersService.findByEmail(credentials!.email);
+    const userExistsWithEmail = await this.usersService.findByEmail(credentials!.email);
 
-    if (userExists) {
+    if (userExistsWithEmail) {
       console.error(`User with email "${credentials!.email}" already exists`);
       return null;
     }
@@ -111,13 +111,30 @@ export class AuthService {
   }
 
   async authenticateWithGoogle(profile: GoogleProfile): Promise<Pick<User, "id" | "email"> | null> {
-    const userExists = await this.usersService.findByGoogleId(profile.sub);
+    const userExistsWithGoogleId = await this.usersService.findByGoogleId(profile.sub);
 
-    if (userExists) {
+    if (userExistsWithGoogleId) {
       return {
-        id: userExists.id,
-        email: userExists.email,
+        id: userExistsWithGoogleId.id,
+        email: userExistsWithGoogleId.email,
       };
+    }
+
+    // For account linking --> when a user has already signed up with a different authentication provider
+    // This keeps up the unique email constraint
+    const existingUserWithEmail = await this.usersService.findByEmail(profile.email || "");
+
+    if (existingUserWithEmail) {
+      const updatedUser = await this.usersService.update(existingUserWithEmail.id, { googleId: profile.id });
+
+      if (!updatedUser) {
+        return null;
+      }
+      
+      return {
+        id: updatedUser.id!,
+        email: updatedUser.email!,
+      }
     }
 
     const userToCreate: UserToCreate = {
@@ -143,13 +160,30 @@ export class AuthService {
   }
 
   async authenticateWithGithub(profile: GithubProfile): Promise<Pick<User, "id" | "email"> | null> {
-    const userExists = await this.usersService.findByGithubId(String(profile.id));
+    const existingUserWithGithubId = await this.usersService.findByGithubId(String(profile.id));
 
-    if (userExists) {
+    if (existingUserWithGithubId) {
       return {
-        id: userExists.id,
-        email: userExists.email,
+        id: existingUserWithGithubId.id,
+        email: existingUserWithGithubId.email,
       };
+    }
+
+    // For account linking --> when a user has already signed up with a different authentication provider
+    // This keeps up the unique email constraint
+    const existingUserWithEmail = await this.usersService.findByEmail(profile.email || "");
+
+    if (existingUserWithEmail) {
+      const updatedUser = await this.usersService.update(existingUserWithEmail.id, { githubId: String(profile.id) });
+
+      if (!updatedUser) {
+        return null;
+      }
+      
+      return {
+        id: updatedUser.id!,
+        email: updatedUser.email!,
+      }
     }
 
     const userToCreate: UserToCreate = {
