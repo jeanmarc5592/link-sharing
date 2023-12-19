@@ -11,6 +11,7 @@ This is a solution to the [Link-sharing app challenge on Frontend Mentor](https:
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
   - [Useful resources](#useful-resources)
+- [Extra features](#extra-features)
 - [Author](#author)
 
 ## Overview
@@ -63,6 +64,22 @@ Users should be able to:
 - [Drag and Drop in React](https://www.robinwieruch.de/react-drag-and-drop/) - This helped me a lot for integrating the drag and drop functionality in the frontend.
 - [Next Cloudinary](https://next.cloudinary.dev/) - This is an amazing package that makes the process of integrating and using `cloudinary` in your `Next.js` project much easier.
 - [Chat GPT](https://chat.openai.com/) - Besides `Google` it offers a great help as your coding buddy.
+
+## Extra features
+
+I've added a few extra features that weren't in the challenge description. For me, this is an essential part of my process to bring in my own ideas and further hone my skills. It helps to think about, plan and finally implement a feature.
+
+These are the extra features:
+
+**Click Analysis**
+- when a link is clicked, this statistic is recorded in the database
+- the user then receives a graphic in the application for each link showing how often it has been clicked in the last 7 days
+- it was a bit of a challenge to model the database in such a way that the click made is also saved correctly under the current day
+- in addition, it was sometimes not easy to prepare the data correctly for display in the frontend, but it was a lot of fun
+
+**Authentication via social media**
+- in addition to the conventional authentication via email and password, the user can also authenticate himself with his Google and Github account
+- the big challenge was that if he is already saved via another provider with the same email, the account is linked in the database so that he can authenticate himself with both providers in the future and both paths point to the same account, because emails should always be unique
 
 ## Author
 
