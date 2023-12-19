@@ -26,6 +26,10 @@ const SignupForm = () => {
     await signIn("google");
   };
 
+  const onGithubLogin = async () => {
+    await signIn("github");
+  };
+
   return (
     <AuthCard>
       <FormProvider {...methods}>
@@ -79,8 +83,16 @@ const SignupForm = () => {
         Google
       </Button>
 
+      <Button
+        className="mb-6"
+        variant="secondary"
+        onClick={onGithubLogin}
+      >
+        Github
+      </Button>
+
       <Typography className="text-center">
-        Don&apos;t have an account? <a className="text-custom-purple" href={ROUTES.auth.signup.href}>Create account</a>
+        Already have an account? <a className="text-custom-purple" href={ROUTES.auth.login.href}>Sign in</a>
       </Typography>
     </AuthCard>
   )

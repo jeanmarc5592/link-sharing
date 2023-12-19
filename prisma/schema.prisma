@@ -17,6 +17,7 @@ model User {
   picture             String?
   links               Link[]
   googleId            String?
+  githubId            String?
   showRemoveLinkModal Boolean  @default(true)
   createdAt           DateTime @default(now()) @map(name: "created_at")
   updatedAt           DateTime @updatedAt @map(name: "updated_at")

@@ -27,6 +27,10 @@ const LoginForm = () => {
     await signIn("google");
   };
 
+  const onGithubLogin = async () => {
+    await signIn("github");
+  };
+
   return (
     <AuthCard>
       <FormProvider {...methods}>
@@ -70,6 +74,14 @@ const LoginForm = () => {
         onClick={onGoogleLogin}
       >
         Google
+      </Button>
+
+      <Button
+        className="mb-6"
+        variant="secondary"
+        onClick={onGithubLogin}
+      >
+        Github
       </Button>
 
       <Typography className="text-center">

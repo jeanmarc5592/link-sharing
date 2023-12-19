@@ -7,6 +7,8 @@ import { signupSchema } from "@/lib/validators/signup";
 import { HttpService } from "./http";
 import { NextRequestWithAuth } from "next-auth/middleware";
 import { GoogleProfile } from "next-auth/providers/google";
+import { GithubProfile } from "next-auth/providers/github";
+import { UserToCreate } from "./auth.types";
 
 export class AuthService {
   private usersService: UsersService;
@@ -61,17 +63,18 @@ export class AuthService {
       return null;
     }
 
-    const userExists = await this.usersService.findByEmail(credentials!.email);
+    const userExistsWithEmail = await this.usersService.findByEmail(credentials!.email);
 
-    if (userExists) {
+    if (userExistsWithEmail) {
       console.error(`User with email "${credentials!.email}" already exists`);
       return null;
     }
 
-    const userToCreate: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture"> = {
+    const userToCreate: UserToCreate = {
       email: credentials!.email,
       password: await this.cryptographyService.hashString(credentials!.password),
       googleId: null,
+      githubId: null,
       firstName: null,
       lastName: null,
       picture: null,
@@ -107,19 +110,37 @@ export class AuthService {
     return "OK";
   }
 
-  async authenticateWithGoogle(profile: GoogleProfile): Promise<Pick<User, "id" | "email">> {
-    const userExists = await this.usersService.findByGoogleId(profile.sub);
+  async authenticateWithGoogle(profile: GoogleProfile): Promise<Pick<User, "id" | "email"> | null> {
+    const userExistsWithGoogleId = await this.usersService.findByGoogleId(profile.sub);
 
-    if (userExists) {
+    if (userExistsWithGoogleId) {
       return {
-        id: userExists.id,
-        email: userExists.email,
+        id: userExistsWithGoogleId.id,
+        email: userExistsWithGoogleId.email,
       };
     }
 
-    const userToCreate: Pick<User, "email" | "password" | "googleId" | "firstName" | "lastName" | "picture"> = {
+    // For account linking --> when a user has already signed up with a different authentication provider
+    // This keeps up the unique email constraint
+    const existingUserWithEmail = await this.usersService.findByEmail(profile.email || "");
+
+    if (existingUserWithEmail) {
+      const updatedUser = await this.usersService.update(existingUserWithEmail.id, { googleId: profile.id });
+
+      if (!updatedUser) {
+        return null;
+      }
+      
+      return {
+        id: updatedUser.id!,
+        email: updatedUser.email!,
+      }
+    }
+
+    const userToCreate: UserToCreate = {
       email: profile.email,
       googleId: profile.sub,
+      githubId: null,
       password: null,
       firstName: profile.given_name,
       lastName: profile.family_name,
@@ -128,9 +149,62 @@ export class AuthService {
 
     const user = await this.usersService.create(userToCreate);
 
+    if (!user) {
+      return null;
+    }
+
     return {
-      id: user?.id || "% ID %",
-      email: user?.email || "% EMAIL %",
+      id: user.id,
+      email: user.email,
+    };
+  }
+
+  async authenticateWithGithub(profile: GithubProfile): Promise<Pick<User, "id" | "email"> | null> {
+    const existingUserWithGithubId = await this.usersService.findByGithubId(String(profile.id));
+
+    if (existingUserWithGithubId) {
+      return {
+        id: existingUserWithGithubId.id,
+        email: existingUserWithGithubId.email,
+      };
+    }
+
+    // For account linking --> when a user has already signed up with a different authentication provider
+    // This keeps up the unique email constraint
+    const existingUserWithEmail = await this.usersService.findByEmail(profile.email || "");
+
+    if (existingUserWithEmail) {
+      const updatedUser = await this.usersService.update(existingUserWithEmail.id, { githubId: String(profile.id) });
+
+      if (!updatedUser) {
+        return null;
+      }
+      
+      return {
+        id: updatedUser.id!,
+        email: updatedUser.email!,
+      }
+    }
+
+    const userToCreate: UserToCreate = {
+      email: profile.email || "",
+      password: null,
+      googleId: null,
+      githubId: String(profile.id),
+      firstName: profile.name,
+      lastName: "",
+      picture: profile.avatar_url,
+    }
+
+    const user = await this.usersService.create(userToCreate);
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
     };
   }
 }
